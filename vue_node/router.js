@@ -16,6 +16,13 @@ router.get('/', function (req, res) {
     })
 })
 
+router.get('/manage', function (req, res) {
+    res.render('manage.html', {
+        name: 'Master'
+    })
+})
+
+
 
 
 module.exports = router
