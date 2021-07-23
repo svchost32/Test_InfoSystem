@@ -5,8 +5,13 @@ const bodyParser = require('body-parser')//处理post
 var session = require('express-session')
 const serverport = 5000 //端口地址
 
+
+
 // var  MongoStore  = require("connect-mongo")(session);
 // 数据库模块
+
+
+
 
 var app = express()
 
