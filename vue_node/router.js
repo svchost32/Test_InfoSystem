@@ -13,8 +13,25 @@ var router = express.Router()
 router.get('/', function (req, res) {
     res.render('login.html', {
         name: 'Master'
-    })
+    }) 
 })
+router.get('/manage', function (req, res) {
+
+    // req.session.user = null
+    res.send(req)
+    console.log("来请求了");
+    res.end('success')
+})
+
+
+router.post('/console', function (req, res) {
+
+    // req.session.user = null
+     console.log(req.body)
+    res.end('success')
+
+})
+
 
 
 
