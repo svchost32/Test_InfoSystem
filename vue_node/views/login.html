@@ -38,7 +38,7 @@
 
 <body>
 
-    <form class="form-signin border rounded" v-on:submit.prevent id="app">
+    <form class="form-signin border rounded" id="app">
         <div class="text-center mb-4">
             <h1 class="h3 mb-3 font-weight-normal">用户登录</h1>
         </div>
@@ -51,8 +51,8 @@
                 <div class="row">
                     <div class="col-md-9 mb-3">
                         <div class="form-label-group">
-                            <input type="userID" id="userID" class="form-control" placeholder="用户ID" v-model="userID"
-                                required autofocus>
+                            <input type="userID" id="userID" class="form-control" placeholder="用户ID"
+                                v-model="inputform.userID" required autofocus>
                             <label>用户名</label>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                     <div class="col-md-9 mb-3">
                         <div class="form-label-group">
                             <input type="password" id="password" class="form-control" placeholder="密码"
-                                v-model="password" required>
+                                v-model="inputform.password" required>
                             <label for="password">口令</label>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
         <div class="row btn_aera">
             <div class="col-md-auto"></div>
             <div class="col-md-2 mb-3">
-                <button class="btn btn-lg btn-primary btn-block" v-on:click="login">登录</button>
+                <button class="btn btn-lg btn-primary btn-block" @click="submitForm($event)">登录</button>
             </div>
             <div class="col-md-auto"></div>
             <div class="col-md-2 mb-3">
@@ -104,82 +104,54 @@
 
     <script src="node_modules/vue/dist/vue.js"></script>
     <!-- <script src="node_modules/jquery/dist/jquery.js"></script> -->
-    <script src="node_modules/axios/dist/axios.min.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+    <!-- <script type="module" src="public/js/app.js"></script> -->
 
 
     <!-- <script src="node_modules/vue-router/dist/vue-router.js"></script> -->
 
 
     <script>
-        // import $ from jquery
-        // const Foo = {
-        //     template: '<div>foo</div>'
-        // }
-        // const Bar = {
-        //     template: '<div>bar</div>'
-        // }
-        // const routes = [{
-        //         path: '/foo',
-        //         component: Foo
-        //     },
-        //     {
-        //         path: '/bar',
-        //         component: Bar
-        //     }
-        // ]
-        // const router = new VueRouter({
-        //     routes // (缩写) 相当于 routes: routes
-        // })
-
-        const app = new Vue({
-            el: '#app',
-            // router,
-            data: {
-                userID: '',
-                password: '',
-                // test2: function () {
-                //     console.log(this.userID)
-                // }
-            },
-            methods: {
-                login: function () {
-                    // window.location = window.location.href + '/manage';
-                    // console.log(this.userID+" 412 "+this.password)
-                    // this.$router.replace('/menu')
-                    // this.$router.push('/testDemo');
-                    // this.$router.push("/");
-                    // this.$router.push({path:'home'})
-                    var formData = this.userID + '&' + this.password
-                    console.log(formData);
-
-                    axios({
-                        url: '/console',
-                        type: 'post',
-                        data: formData,
-                        dataType: 'json',
-
-                        // withCredentials: true,
-                        success: function (data) {
-                            var status_code = data.status_code
-                            if (status_code === 0) {
-                                window.alert('登录成功')
-                                window.location.href = '/main'
-                            } else if (status_code === 1) {
-                                window.alert('邮箱或密码错误')
-                            } else if (status_code === 2) {
-                                window.alert('用户名已存在')
-                            } else if (status_code === 500) {
-                                window.alert('服务器忙，稍后重试')
-                            }
-                        }
-                    })
+        window.onload = function () {
+            Vue.prototype.$http = axios;
+            const app = new Vue({
+                el: '#app',
+                // router,
+                data: {
+                    inputform: {
+                        userID: '',
+                        password: '',
+                    },
                 },
-                reset: function () {
-                    this.userID = '',
-                        this.password = ''
+                methods: {
+                    login: function () {},
+                    reset: function () {
+                        this.userID = '',
+                            this.password = ''
+                    },
+                    submitForm(event) {
+                        //拦截默认
+                        event.preventDefault();
+                        if (this.userID != '') {
+                            let config = {
+                                headers: {
+                                    'dataType': 'json'
+                                }
+                            }
+
+                            this.$http.post('/register', this.inputform, config).then(function (res) {
+                                if (res.status === 0) {
+                                    alert('登录成功')
+                                }
+                            })
+                        } else {
+                            console.log('error');
+                        }
+
+                    }
                 }
-            }
-        })
+            })
+        }
     </script>
 
 
