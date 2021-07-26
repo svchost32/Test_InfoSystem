@@ -126,13 +126,13 @@
                 methods: {
                     login: function () {},
                     reset: function () {
-                        this.userID = '',
-                            this.password = ''
+                        this.inputform.userID = '',
+                            this.inputform.password = ''
                     },
                     submitForm(event) {
                         //拦截默认
                         event.preventDefault();
-                        if (this.userID != '') {
+                        if (this.inputform.userID != null || this.inputform.password != null) {
                             let config = {
                                 headers: {
                                     'dataType': 'json'
@@ -140,9 +140,7 @@
                             }
 
                             this.$http.post('/register', this.inputform, config).then(function (res) {
-                                if (res.status === 0) {
-                                    alert('登录成功')
-                                }
+                                this.window.location.href=('/manage')
                             })
                         } else {
                             console.log('error');

@@ -37,6 +37,7 @@ router.post('/console', function (req, res) {
 
 
 router.get('/manage', function (req, res) {
+    console.log('get manage请求收到');
     res.render('manage.html', {
         name: 'Master'
     })
@@ -83,11 +84,10 @@ router.post('/register', async function (req, res) {
         //注册成功记录状态
 
         console.log(body_content);
-        // res.status(200).json({
-        //     status_code: 0,
-        //     message: 'ok'
-        // })
-        console.log('test');
+        res.status(200).json({
+            status_code: 0,
+            message: 'ok'
+        })
         // renderer.renderToString(app, (err, html) => {
         //     // if (err) {
         //     //   res.status(500).end('Internal Server Error')
@@ -103,7 +103,7 @@ router.post('/register', async function (req, res) {
         //   })
         
         // res.send('hello')
-        await res.redirect('/login');
+        // await res.redirect('/login');
         
 
     } catch (error) {
