@@ -7,6 +7,10 @@ var express = require('express')
 // const consolep = require('./public/js/console')
 // const { nextTick } = require('process')
 const Vue = require('vue')
+const fs = require('fs')
+const {
+    template
+} = require('express-art-template')
 
 const renderer = require('vue-server-renderer').createRenderer()
 
@@ -16,13 +20,6 @@ router.get('/', function (req, res) {
     res.render('login.html', {
         name: 'Master'
     })
-})
-router.get('/manage', function (req, res) {
-
-    // req.session.user = null
-    res.send(req)
-    console.log("来请求了");
-    res.end('success')
 })
 
 
@@ -37,24 +34,39 @@ router.post('/console', function (req, res) {
 
 
 router.get('/manage', function (req, res) {
-    console.log('get manage请求收到');
+    
     res.render('manage.html', {
-        name: 'Master'
+        user: {
+            name: 'abc',
+
+        },
+        index:"{{index}}",
+        item:{
+            name:'{{item.name}}',
+            account: '{{item.account}}',
+            department: '{{item.department}}',
+            gender:'{{item.gender}}'
+        }
+
     })
 })
 
-
-router.get('/test', function (req, res) {
-    res.render('register.html', {
-        name: 'Master'
-    })
+router.get('/test2', function (req, res) {
+    var managepage = fs.readFileSync('./public/templete/manage.html')
+    res.write(managepage)
+    res.end(managepage)
 })
+
+
+
 
 router.post('/test', async function (req, res) {
     res.render('register.html', {
         name: 'Master'
     })
 })
+
+
 
 
 
@@ -68,7 +80,7 @@ router.post('/register', async function (req, res) {
     var body_content = req.body
 
     try {
-        
+
         // body_content.password = md5(md5(body_content.password)) //密码加密
         // await new User(body_content).save(function (err,user) {  
         //     console.log(user)
@@ -101,10 +113,10 @@ router.post('/register', async function (req, res) {
         //       </html>
         //     `)
         //   })
-        
+
         // res.send('hello')
         // await res.redirect('/login');
-        
+
 
     } catch (error) {
         // return res.status(500).json({
@@ -114,7 +126,7 @@ router.post('/register', async function (req, res) {
         // return nextTick(error)
 
     }
-    
+
 })
 
 
