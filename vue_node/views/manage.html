@@ -62,7 +62,7 @@
                     <div class="sidebar-sticky pt-3">
                         <ul class="nav flex-column">
                             <h6
-                                class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                                class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted menu-title">
                                 <span>部门列表</span>
                                 <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
                                     <span data-feather="plus-circle"></span>
@@ -79,7 +79,8 @@
                                 @click="select_li(index)"
                                 :class="[current_depart ==index?'menuActive':'']"
                                 >
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" 
+                                    href="#">
                                     <span data-feather="'item.name'.png"></span>
                                     {{item.name}}
                                 </a>
@@ -87,7 +88,7 @@
                         </ul>
 
                         <h6
-                            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted menu-title">
                             <span>二级菜单</span>
                             <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
                                 <span data-feather="plus-circle"></span>

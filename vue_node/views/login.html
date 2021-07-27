@@ -130,6 +130,7 @@
                             this.inputform.password = ''
                     },
                     submitForm(event) {
+                        
                         //拦截默认
                         event.preventDefault();
                         if (this.inputform.userID != null || this.inputform.password != null) {
@@ -141,7 +142,9 @@
 
                             this.$http.post('/register', this.inputform, config).then(function (res) {
                                 this.window.location.href=('/manage')
+                                
                             })
+                            
                         } else {
                             console.log('error');
                         }
