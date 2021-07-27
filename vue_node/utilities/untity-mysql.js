@@ -27,6 +27,7 @@ let query = function (sql, values) {
                     } else {
                         // resolve(rows)
                         //json格式化
+                        // console.log(JSON.parse(JSON.stringify(rows)));
                         resolve(JSON.parse(JSON.stringify(rows)));              
                     }
                     // 结束会话

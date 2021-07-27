@@ -51,8 +51,8 @@
                 <div class="row">
                     <div class="col-md-9 mb-3">
                         <div class="form-label-group">
-                            <input type="userID" id="userID" class="form-control" placeholder="用户ID"
-                                v-model="inputform.userID" required autofocus>
+                            <input class="form-control" placeholder="用户ID" v-model="inputform.userID" required
+                                autofocus>
                             <label>用户名</label>
                         </div>
                     </div>
@@ -67,8 +67,7 @@
                 <div class="row">
                     <div class="col-md-9 mb-3">
                         <div class="form-label-group">
-                            <input type="password" id="password" class="form-control" placeholder="密码"
-                                v-model="inputform.password" required>
+                            <input class="form-control" placeholder="密码" v-model="inputform.password" required>
                             <label for="password">口令</label>
                         </div>
                     </div>
@@ -127,13 +126,14 @@
                     login: function () {},
                     reset: function () {
                         this.inputform.userID = '',
-                            this.inputform.password = ''
+                        this.inputform.password = ''
                     },
                     submitForm(event) {
-                        
+
                         //拦截默认
                         event.preventDefault();
-                        if (this.inputform.userID != null || this.inputform.password != null) {
+                        if (Object.keys(this.inputform.userID).length != 0 && Object.keys(this.inputform
+                                .password).length != 0) {
                             let config = {
                                 headers: {
                                     'dataType': 'json'
@@ -141,10 +141,11 @@
                             }
 
                             this.$http.post('/register', this.inputform, config).then(function (res) {
-                                this.window.location.href=('/manage')
-                                
+                                // console.log(res);
+                                // console.log(res.data.message);
+                                this.window.location.href = ('/manage')
                             })
-                            
+
                         } else {
                             console.log('error');
                         }

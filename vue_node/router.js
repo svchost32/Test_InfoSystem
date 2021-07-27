@@ -38,16 +38,17 @@ router.get('/manage', function (req, res) {
     
     res.render('manage.html', {
         //被render替换掉的vue模板，无奈之举
-        user: {
-            name: 'abc',
-
-        },
+        
         index:"{{index}}",
-        item:{
-            name:'{{item.name}}',
-            account: '{{item.account}}',
-            department: '{{item.department}}',
-            gender:'{{item.gender}}'
+        depart:{
+            BMMC:'{{depart.BMMC}}'
+        },
+        user:{
+            PXH:'{{user.PXH}}',
+            YHXM: '{{user.YHXM}}',
+            YHID: '{{user.YHID}}',
+            YHBM:'{{user.YHBM}}',
+            YHXB:'{{user.YHXB}}'
         }
 
     })
@@ -63,6 +64,24 @@ router.get('/test2', async function (req, res) {
     })
     console.log(person);
 })
+
+//所有用户列表
+router.post('/getAllUserListQuery', async function (req, res) {
+    res.status(200).json({
+        status_code: 0,
+        message: 'ok',
+        list: await mysql.query('SELECT * FROM `t_user`')
+    });
+})
+//部门列表
+router.post('/getDepartListQuery', async function (req, res) {
+    res.status(200).json({
+        status_code: 0,
+        message: 'ok',
+        list: await mysql.query('SELECT * FROM `t_depart`')
+    });
+})
+
 
 
 
@@ -105,7 +124,8 @@ router.post('/register', async function (req, res) {
         console.log(body_content);
         res.status(200).json({
             status_code: 0,
-            message: 'ok'
+            message: 'ok',
+            list: await mysql.query('SELECT * FROM `ts_bzdm`')
         })
         // renderer.renderToString(app, (err, html) => {
         //     // if (err) {
