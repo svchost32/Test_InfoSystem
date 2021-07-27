@@ -1,26 +1,42 @@
-var mysql  = require('mysql');
-
+var mysql = require('mysql');
 var datajson = require('../config/database.json');
 
-console.log(datajson);
+
 
 // 创建连接
-var connection = mysql.createConnection({
-  host     : datajson.host,	//本机
-  user     : datajson.user,		//账号root
-  password : datajson.password,	//密码12345
-  database : datajson.database	//数据库名
-});
- 
-// 连接数据库	
-connection.connect();
- 
-//执行数据操作	
-connection.query('SELECT * FROM `ts_bzdm` ', function (error, results, fields) {
-  if (error) throw error;//抛出异常阻止代码往下执行
-  // 没有异常打印输出结果
-  console.log('The solution is: ',results);
+var connectionPool = mysql.createPool({
+    host: datajson.host, //本机
+    user: datajson.user, //账号root
+    password: datajson.password, //密码12345
+    database: datajson.database //数据库名
 });
 
-//关闭连接
-connection.end();
+
+
+let query = function (sql, values) {
+    // 返回一个 Promise
+    return new Promise((resolve, reject) => {
+        connectionPool.getConnection(function (err, connection) {
+            if (err) {
+                reject(err)
+            } else {
+                connection.query(sql, values, (err, rows) => {
+
+                    if (err) {
+                        reject(err)
+                    } else {
+                        // resolve(rows)
+                        //json格式化
+                        resolve(JSON.parse(JSON.stringify(rows)));              
+                    }
+                    // 结束会话
+                    connection.release()
+                })
+            }
+        })
+    })
+}
+
+module.exports = {
+    query
+}

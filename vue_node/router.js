@@ -6,6 +6,7 @@ var express = require('express')
 // const cmts = require('./model/comments')
 // const consolep = require('./public/js/console')
 // const { nextTick } = require('process')
+const mysql = require('./utilities/untity-mysql')
 const Vue = require('vue')
 const fs = require('fs')
 const {
@@ -36,6 +37,7 @@ router.post('/console', function (req, res) {
 router.get('/manage', function (req, res) {
     
     res.render('manage.html', {
+        //被render替换掉的vue模板，无奈之举
         user: {
             name: 'abc',
 
@@ -51,10 +53,15 @@ router.get('/manage', function (req, res) {
     })
 })
 
-router.get('/test2', function (req, res) {
-    var managepage = fs.readFileSync('./public/templete/manage.html')
-    res.write(managepage)
-    res.end(managepage)
+router.get('/test2', async function (req, res) {
+    const list = await mysql.query('SELECT * FROM `ts_bzdm`')
+    // for(value in list){
+    //     console.log(value);
+    // }
+    var person = list.filter((p)=>{
+        return p.MC = '男';
+    })
+    console.log(person);
 })
 
 
