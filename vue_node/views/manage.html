@@ -39,7 +39,7 @@
 <body>
     <div id='app'>
         <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">欢迎！{{ user.name }}</a>
+            <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">欢迎！{{ name }}</a>
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse"
                 data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-secondary" @click='search'>查询</button>
                     <button type="button" class="btn btn-secondary">新增</button>
-                    <button type="button" class="btn btn-secondary">注销</button>
+                    <button type="button" class="btn btn-secondary" href='/logout'>注销</button>
                 </div>
             </ul>
         </nav>

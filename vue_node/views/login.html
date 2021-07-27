@@ -67,7 +67,7 @@
                 <div class="row">
                     <div class="col-md-9 mb-3">
                         <div class="form-label-group">
-                            <input class="form-control" placeholder="密码" v-model="inputform.password" required>
+                            <input type='password' class="form-control" placeholder="密码" v-model="inputform.password" required>
                             <label for="password">口令</label>
                         </div>
                     </div>
@@ -140,10 +140,16 @@
                                 }
                             }
 
-                            this.$http.post('/register', this.inputform, config).then(function (res) {
+                            this.$http.post('/login', this.inputform, config).then(function (res) {
                                 // console.log(res);
                                 // console.log(res.data.message);
+                                // console.log(res.data.status_code);
+                                if(res.data.status_code === 1){
                                 this.window.location.href = ('/manage')
+                                }else{
+                                    console.log('error');
+                                }
+
                             })
 
                         } else {

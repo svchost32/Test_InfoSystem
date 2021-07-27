@@ -7,11 +7,11 @@ var express = require('express')
 // const consolep = require('./public/js/console')
 // const { nextTick } = require('process')
 const mysql = require('./utilities/untity-mysql')
+
+
 const Vue = require('vue')
 const fs = require('fs')
-const {
-    template
-} = require('express-art-template')
+const template = require('express-art-template')
 
 const renderer = require('vue-server-renderer').createRenderer()
 
@@ -21,6 +21,23 @@ router.get('/', function (req, res) {
     res.render('login.html', {
         name: 'Master'
     })
+})
+
+router.post('/login', async function (req, res) {
+    if (req.body.userID === 'jason') {
+        req.session.isLogin = true;
+        res.status(200).json({
+            status_code: 1,
+            message: 'ok'
+        });
+    }else{
+        req.session.isLogin = false;
+        res.status(200).json({
+            status_code: 2,
+            message: 'bad'
+        });
+    }
+   
 })
 
 
@@ -35,19 +52,19 @@ router.post('/console', function (req, res) {
 
 
 router.get('/manage', function (req, res) {
-    
+
     res.render('manage.html', {
         //被render替换掉的vue模板，无奈之举     
-        index:"{{index}}",
-        depart:{
-            BMMC:'{{depart.BMMC}}'
+        index: "{{index}}",
+        depart: {
+            BMMC: '{{depart.BMMC}}'
         },
-        user:{
-            PXH:'{{user.PXH}}',
+        user: {
+            PXH: '{{user.PXH}}',
             YHXM: '{{user.YHXM}}',
             YHID: '{{user.YHID}}',
-            YHBM:'{{user.YHBM}}',
-            YHXB:'{{user.YHXB}}'
+            YHBM: '{{user.YHBM}}',
+            YHXB: '{{user.YHXB}}'
         }
 
     })
@@ -58,7 +75,7 @@ router.get('/test2', async function (req, res) {
     // for(value in list){
     //     console.log(value);
     // }
-    var person = list.filter((p)=>{
+    var person = list.filter((p) => {
         return p.MC = '男';
     })
     console.log(person);
@@ -90,7 +107,7 @@ router.post('/getDepartListQuery', async function (req, res) {
 })
 //部门所有人员查询
 router.post('/getDepartUserListQuery', async function (req, res) {
-    let content  = JSON.parse(JSON.stringify(req.body[0]));
+    let content = JSON.parse(JSON.stringify(req.body[0]));
     res.status(200).json({
         status_code: 0,
         message: 'ok',
@@ -106,6 +123,12 @@ router.post('/test', async function (req, res) {
     })
 })
 
+
+router.get('/edit', function (req, res) {
+    res.render('edit.html', {
+        name: 'Master'
+    })
+})
 
 
 

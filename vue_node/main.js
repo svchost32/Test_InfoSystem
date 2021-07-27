@@ -3,7 +3,10 @@ var path = require('path')
 var router = require('./router') //路径标识
 const bodyParser = require('body-parser')//处理post
 var session = require('express-session')
+var cookieParser = require('cookie-parser')
+
 const serverport = 5000 //端口地址
+
 
 
 
@@ -47,8 +50,15 @@ app.use(bodyParser.json())
 //          res.header("Content-Type", "application/json;charset=utf-8");
 //          next();
 //      });
+app.use(cookieParser());
 
-
+app.use(session({
+    //目的是为了增加安全性，防止客户端恶意伪造
+    secret: 'TDH TEST',
+    resave: false,
+    saveUninitialized: true,//无论是否适用Session，都默认直接分配一把钥匙
+    cookie: { secure: true }
+  }))
 
 app.use(router)
 
