@@ -45,9 +45,9 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
+            <input class="form-control form-control-dark w-50 float-right" type="text" placeholder="姓名或账号"
+                aria-label="姓名或账号" v-model='idSearch'>
             <ul class="navbar-nav px-3">
-
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-secondary" @click='search'>查询</button>
                     <button type="button" class="btn btn-secondary">新增</button>
@@ -63,7 +63,7 @@
                         <ul class="nav flex-column">
                             <h6
                                 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted menu-title">
-                                <span @click='defaultDepart'>部门列表</span>
+                                <span class='' @click='defaultDepart'>部门列表</span>
                                 <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
                                     <span data-feather="plus-circle"></span>
                                 </a>
@@ -74,9 +74,9 @@
                                     Dashboard <span class="sr-only">(current)</span>
                                 </a>
                             </li> -->
-                            <li class="nav-item" v-for='(depart,index) in departmentsList' @click="select_li(index)"
+                            <li class="nav-item" v-for='(depart,index) in departmentsList' @click="select_depart(index)"
                                 :class="[current_depart ==index?'menuActive':'']">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link">
                                     <span data-feather="'item.name'.png"></span>
                                     {{depart.BMMC}}
                                 </a>
@@ -152,35 +152,40 @@
         Vue.prototype.$http = axios;
         const app = new Vue({
             data: {
-                title: 'todo list',
-                test: '123',
-                // todos,
-                todos: JSON.parse(window.localStorage.getItem('todos') || '[]'),
-                taskname: '',
-                currentediting: null,
-                filt: 'all',
-                users: '',//主列表
-                departmentsList:'',//部门列表
-                current_depart: null,//部门被单击选项
+                idSearch: '',//名字或id
+                users: '', //主列表
+                departmentsList: '', //部门列表
+                current_depart: null, //部门被单击选项
 
             },
-            created:function(){
+            created: function () {
                 let that = this;
                 let config = {
+                    headers: {
+                        'dataType': 'json'
+                    }
+                }
+                this.$http.post('/getDepartListQuery', this.users, config).then(function (res) {
+                    that.departmentsList = res.data.list;
+                })
+            },
+            methods: {
+                select_depart: function (index) {
+                    let that = this;
+                    this.current_depart = index;
+                    let departID = this.departmentsList.filter((str) => {
+                        return str.PXH == that.current_depart + 1;
+                    })
+                    let config = {
                         headers: {
                             'dataType': 'json'
                         }
                     }
-                this.$http.post('/getDepartListQuery', this.users, config).then(function (res) {
-                        that.departmentsList = res.data.list;
+                    this.$http.post('/getDepartUserListQuery', departID, config).then(function (res) {
+                        //部门列表                            
+                        that.users = res.data.list;
                     })
-            },
-            methods: {
-                mouseenter_f: function (index) {
-                    this.background = red;
-                },
-                select_li: function (index) {
-                    this.current_depart = index
+
                 },
                 search: function () {
                     // console.log(this.users);
@@ -190,14 +195,23 @@
                             'dataType': 'json'
                         }
                     }
-                    this.$http.post('/getAllUserListQuery', this.users, config).then(function (res) {
-                        that.users = res.data.list;
-                    })
+                    if (this.idSearch.length == 0) {
+                        this.$http.post('/getAllUserListQuery', '', config).then(function (res) {
+                            that.users = res.data.list;
+                        })
+                    } else {
+                        let ids = {
+                            id: this.idSearch
+                        }
+                        this.$http.post('/getUserQuery', ids, config).then(function (res) {
+                            that.users = res.data.list;
+                        })
+                    }
                 },
-                sort:function(){
+                sort: function () {
                     this.users.reverse();
                 },
-                defaultDepart:function(){
+                defaultDepart: function () {
                     this.current_depart = null;
                 }
             }

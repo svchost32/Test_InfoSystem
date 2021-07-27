@@ -37,8 +37,7 @@ router.post('/console', function (req, res) {
 router.get('/manage', function (req, res) {
     
     res.render('manage.html', {
-        //被render替换掉的vue模板，无奈之举
-        
+        //被render替换掉的vue模板，无奈之举     
         index:"{{index}}",
         depart:{
             BMMC:'{{depart.BMMC}}'
@@ -73,6 +72,14 @@ router.post('/getAllUserListQuery', async function (req, res) {
         list: await mysql.query('SELECT * FROM `t_user`')
     });
 })
+//特征查询
+router.post('/getUserQuery', async function (req, res) {
+    res.status(200).json({
+        status_code: 0,
+        message: 'ok',
+        list: await mysql.query(`SELECT * FROM \`t_user\` where YHID='${req.body.id}'`)
+    });
+})
 //部门列表
 router.post('/getDepartListQuery', async function (req, res) {
     res.status(200).json({
@@ -81,8 +88,15 @@ router.post('/getDepartListQuery', async function (req, res) {
         list: await mysql.query('SELECT * FROM `t_depart`')
     });
 })
-
-
+//部门所有人员查询
+router.post('/getDepartUserListQuery', async function (req, res) {
+    let content  = JSON.parse(JSON.stringify(req.body[0]));
+    res.status(200).json({
+        status_code: 0,
+        message: 'ok',
+        list: await mysql.query(`SELECT * FROM \`t_user\` where YHBM='${content.BMDM}'`)
+    });
+})
 
 
 
