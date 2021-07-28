@@ -50,8 +50,8 @@
             <ul class="navbar-nav px-3">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-secondary" @click='search'>查询</button>
-                    <button type="button" class="btn btn-secondary">新增</button>
-                    <button type="button" class="btn btn-secondary" href='/logout'>注销</button>
+                    <button type="button" class="btn btn-secondary" @click='edit'>新增</button>
+                    <button type="button" class="btn btn-secondary" @click='logout'>注销</button>
                 </div>
             </ul>
         </nav>
@@ -152,12 +152,13 @@
         Vue.prototype.$http = axios;
         const app = new Vue({
             data: {
-                idSearch: '',//名字或id
+                idSearch: '', //名字或id
                 users: '', //主列表
                 departmentsList: '', //部门列表
                 current_depart: null, //部门被单击选项
 
             },
+            //create生命周期自动生成部门列表
             created: function () {
                 let that = this;
                 let config = {
@@ -170,10 +171,13 @@
                 })
             },
             methods: {
+
+                //部门选择
                 select_depart: function (index) {
                     let that = this;
                     this.current_depart = index;
                     let departID = this.departmentsList.filter((str) => {
+                        //index从0，pxh从1
                         return str.PXH == that.current_depart + 1;
                     })
                     let config = {
@@ -187,6 +191,7 @@
                     })
 
                 },
+                //查询
                 search: function () {
                     // console.log(this.users);
                     let that = this;
@@ -195,7 +200,9 @@
                             'dataType': 'json'
                         }
                     }
+                    //判断是否为0
                     if (this.idSearch.length == 0) {
+                        //没输入搜全部
                         this.$http.post('/getAllUserListQuery', '', config).then(function (res) {
                             that.users = res.data.list;
                         })
@@ -203,14 +210,32 @@
                         let ids = {
                             id: this.idSearch
                         }
+                        //输入搜具体人
                         this.$http.post('/getUserQuery', ids, config).then(function (res) {
                             that.users = res.data.list;
                         })
                     }
                 },
+
+                edit: function () {
+                    this.$http.post('/edit').then(function (res) {
+                        this.window.location.href = (res.data.route) //route为后端给
+                    })
+                },
+
+                //注销
+                logout: function () {
+                    this.$http.post('/logout').then(function (res) {
+                        this.window.location.href = (res.data.route) //route为后端给
+                    })
+                },
+
+                //点列表排序
                 sort: function () {
                     this.users.reverse();
                 },
+
+                //点部门让选择取消
                 defaultDepart: function () {
                     this.current_depart = null;
                 }

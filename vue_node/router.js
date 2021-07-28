@@ -17,27 +17,36 @@ const renderer = require('vue-server-renderer').createRenderer()
 
 var router = express.Router()
 
+
+//输入页面
 router.get('/', function (req, res) {
-    res.render('login.html', {
-        name: 'Master'
-    })
+    if (req.session.isLogin) {
+        //确认登录
+        res.redirect('/manage')
+    } else {
+        res.render('login.html', {
+            name: 'Master'
+        })
+    }
 })
 
+//登陆方法
 router.post('/login', async function (req, res) {
     if (req.body.userID === 'jason') {
         req.session.isLogin = true;
         res.status(200).json({
             status_code: 1,
+            route: '/manage',
             message: 'ok'
         });
-    }else{
+    } else {
         req.session.isLogin = false;
         res.status(200).json({
-            status_code: 2,
+            status_code: 0,
             message: 'bad'
         });
     }
-   
+
 })
 
 
@@ -52,29 +61,32 @@ router.post('/console', function (req, res) {
 
 
 router.get('/manage', function (req, res) {
+    if (req.session.isLogin) {
+        //确认登录
+        res.render('manage.html', {
+            //被render替换掉的vue模板，无奈之举     
+            index: "{{index}}",
+            depart: {
+                BMMC: '{{depart.BMMC}}'
+            },
+            user: {
+                PXH: '{{user.PXH}}',
+                YHXM: '{{user.YHXM}}',
+                YHID: '{{user.YHID}}',
+                YHBM: '{{user.YHBM}}',
+                YHXB: '{{user.YHXB}}'
+            }
 
-    res.render('manage.html', {
-        //被render替换掉的vue模板，无奈之举     
-        index: "{{index}}",
-        depart: {
-            BMMC: '{{depart.BMMC}}'
-        },
-        user: {
-            PXH: '{{user.PXH}}',
-            YHXM: '{{user.YHXM}}',
-            YHID: '{{user.YHID}}',
-            YHBM: '{{user.YHBM}}',
-            YHXB: '{{user.YHXB}}'
-        }
+        })
+    } else {
+        res.redirect('/')
+    }
 
-    })
+
 })
 
 router.get('/test2', async function (req, res) {
     const list = await mysql.query('SELECT * FROM `ts_bzdm`')
-    // for(value in list){
-    //     console.log(value);
-    // }
     var person = list.filter((p) => {
         return p.MC = '男';
     })
@@ -118,18 +130,50 @@ router.post('/getDepartUserListQuery', async function (req, res) {
 
 
 router.post('/test', async function (req, res) {
-    res.render('register.html', {
-        name: 'Master'
-    })
+    // res.render('register.html', {
+    //     name: 'Master'
+    // })
 })
 
-
+//修改页
 router.get('/edit', function (req, res) {
-    res.render('edit.html', {
-        name: 'Master'
-    })
+    if (req.session.isLogin) {
+        if (req.query.code == (1 || 2 || 3)) {
+            res.render('edit.html', {
+                name: 'Master',
+                //func_code渲染功能
+                FUNC_CODE: req.query.code
+            })
+        } else {
+            //回登录页
+            res.redirect('/')
+        }
+    } else {
+        res.redirect('/')
+    }
 })
 
+
+router.post('/edit', async function (req, res) {
+    if (req.session.isLogin) {
+        res.status(200).json({
+            status_code: 1,
+            route: '/edit?code=1'
+        });
+    }
+
+})
+
+
+
+router.post('/logout', async function (req, res) {
+    delete req.session.user
+    delete req.session.isLogin
+    res.status(200).json({
+        status_code: 1,
+        route: '/'
+    });
+})
 
 
 
