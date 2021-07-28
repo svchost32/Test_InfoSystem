@@ -217,7 +217,7 @@
               (this.inputForm.YHXM.length != 0)
             ) {
               this.inputForm.YHDM = this.inputForm.DWDM + this.inputForm.YHID;
-              console.log(this.inputForm);
+              // console.log(this.inputForm);
               this.$http.post('/insertUser', this.inputForm, config).then(function (res) {
                 if (res.data.status_code === 1) {
                   //1为成功

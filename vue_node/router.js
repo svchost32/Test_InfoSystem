@@ -193,6 +193,7 @@ router.post('/insertUser', async function (req, res) {
     if (req.session.isLogin) {
         // console.log(req.body);
         let content = req.body
+        // console.log(content);
         res.status(200).json({
             status_code: 1,
             message: 'ok',
