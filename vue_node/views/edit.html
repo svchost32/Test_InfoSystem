@@ -48,21 +48,21 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="objectName">用户ID *</label>
-        <input type="text" class="form-control" id="firstName" value="" required>
+        <input type="text" class="form-control" id="firstName" v-model='inputForm.YHID' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">口令 *</label>
-        <input type="text" class="form-control" id="firstName" value="" required>
+        <input type="text" class="form-control" id="firstName" v-model='inputForm.YHKL' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">确认口令 *</label>
-        <input type="text" class="form-control" id="firstName" value="" required>
+        <input type="text" class="form-control" id="firstName" v-model='verify_YHKL' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
@@ -94,7 +94,7 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="objectName">出生日期</label>
-        <input type="text" class="form-control" id="firstName" value="">
+        <input type="text" class="form-control" id="firstName" v-model='inputForm.CSRQ'>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
@@ -114,7 +114,7 @@
           </div> -->
     </div>
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" id="save-info">
+      <input type="checkbox" class="custom-control-input" id="save-info" v-model='inputForm.SFJY'>
       <label class="custom-control-label" for="save-info">禁用</label>
     </div>
 
@@ -148,9 +148,18 @@
       const app = new Vue({
         // router,
         data: {
+          OPERA_CODE:'{{FUNC_CODE}}',
+          verify_YHKL:'',
           inputForm: {
-            userID: '',
-            password: '',
+            YHDM: '',
+            DWDM: '',
+            YHID: '',
+            YHXM: '',
+            YHKL: '',
+            YHXB: '',
+            YHBM: '',
+            CSRQ: '',
+            SFJY: '',
             PXH: ''
           },
           departmentsList: '', //部门列表
@@ -176,7 +185,10 @@
 
         },
         methods: {
-
+          submitForm($event){
+            event.preventDefault();
+            console.log(this.OPERA_CODE);
+          }
 
 
         }
