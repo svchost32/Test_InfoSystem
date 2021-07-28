@@ -182,18 +182,22 @@
 
 
         <hr class="mb-4">
-        <button class="btn btn-primary btn-lg btn-block" type="submit">提交</button>
+        <div class="row btn_aera text-center">
+          {{ if (FUNC_CODE == 1)}}
+          <div class="col-md-2 mb-3">
+              <button class="btn btn-lg btn-primary btn-block" >保存</button>
+          </div>
+          {{ /if }}
+     
+          <div class="col-md-2 mb-3">
+              <button class="btn btn-lg btn-primary btn-block" >返回</button>
+          </div>
+          <!-- <div class="col-md-2 mb-3">
+              <router-link to="/foo">Go to Foo</router-link>
+          </div> -->
+
+      </div>
     </form>
-
-
-    <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017-2021 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-  </footer> -->
   </div>
 </body>
 

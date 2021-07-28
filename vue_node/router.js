@@ -137,8 +137,10 @@ router.post('/test', async function (req, res) {
 
 //修改页
 router.get('/edit', function (req, res) {
+    //触发了
+    let code = req.query.code
     if (req.session.isLogin) {
-        if (req.query.code == (1 || 2 || 3)) {
+        if (code == 1 || code == 2 || code == 3) {
             res.render('edit.html', {
                 name: 'Master',
                 //func_code渲染功能
@@ -158,7 +160,7 @@ router.post('/edit', async function (req, res) {
     if (req.session.isLogin) {
         res.status(200).json({
             status_code: 1,
-            route: '/edit?code=1'
+            route: '/edit?code=2'
         });
     }
 

@@ -5,3 +5,11 @@
 .lh-condensed {
   line-height: 1.25;
 }
+
+
+.btn_aera {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
