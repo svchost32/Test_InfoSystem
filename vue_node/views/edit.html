@@ -12,6 +12,7 @@
   <!-- Bootstrap core CSS -->
 
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/public/css/timepicker.css">
 
 
   <style>
@@ -48,21 +49,21 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="objectName">用户ID *</label>
-        <input type="text" class="form-control" id="firstName" v-model='inputForm.YHID' required>
+        <input type="text" class="form-control" v-model='inputForm.YHID' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">口令 *</label>
-        <input type="text" class="form-control" id="firstName" v-model='inputForm.YHKL' required>
+        <input type="password" class="form-control" v-model='inputForm.YHKL' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">确认口令 *</label>
-        <input type="text" class="form-control" id="firstName" v-model='verify_YHKL' required>
+        <input type="password" class="form-control" v-model='verify_YHKL' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
@@ -73,35 +74,37 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="objectName">姓名 *</label>
-        <input type="text" class="form-control" id="firstName" value="" required>
+        <input type="text" class="form-control" v-model='inputForm.YHXM' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">性别</label>
-        <select class="custom-select d-block w-100" id="state" required>
+        <select class="custom-select d-block w-100">
           <option v-for='(gender,index) in genderList'>{{gender.MC}}</option>
         </select>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">部门</label>
-        <select class="custom-select d-block w-100" id="state" required>
+        <select class="custom-select d-block w-100">
           <option v-for='(depart,index) in departmentsList'>{{depart.BMMC}}</option>
         </select>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4 mb-3">
+      <div class="col-md-8 mb-3">
         <label for="objectName">出生日期</label>
-        <input type="text" class="form-control" id="firstName" v-model='inputForm.CSRQ'>
-        <div class="invalid-feedback">
-          输入目标对象姓名
+        <div class="row">
+          <div class="col-sm-12">
+            <input type="text" class="form-control datetimepicker-input" id="datetimepicker5"
+              data-toggle="datetimepicker" data-target="#datetimepicker5" ref='date' />
+          </div>
         </div>
       </div>
       <div class="col-md-2 mb-3">
         <label for="objectName">排序号</label>
-        <input type="text" class="form-control" id="firstName" v-model='inputForm.PXH' readonly>
+        <input type="text" class="form-control" v-model='inputForm.PXH' readonly>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
@@ -141,6 +144,19 @@
 
   <script src="node_modules/vue/dist/vue.js"></script>
   <script src="node_modules/axios/dist/axios.js"></script>
+  <script src="node_modules/jquery/dist/jquery.js"></script>
+  <script src="public/js/moment.js"></script>
+  <script src="public/js/timepicker.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      $('#datetimepicker5').datetimepicker({
+        locale: 'zh-cn',
+        format: 'YYYY-MM-DD',
+        autoclose: 1,
+      });
+    });
+  </script>
 
   <script>
     window.onload = function () {
@@ -148,18 +164,18 @@
       const app = new Vue({
         // router,
         data: {
-          OPERA_CODE:'{{FUNC_CODE}}',
-          verify_YHKL:'',
+          OPERA_CODE: '{{FUNC_CODE}}',
+          verify_YHKL: '',
           inputForm: {
             YHDM: '',
-            DWDM: '',
+            DWDM: '000000',
             YHID: '',
             YHXM: '',
             YHKL: '',
-            YHXB: '',
-            YHBM: '',
+            YHXB: '09_00003-1',
+            YHBM: '32010003',
             CSRQ: '',
-            SFJY: '',
+            SFJY: '0',
             PXH: ''
           },
           departmentsList: '', //部门列表
@@ -180,15 +196,43 @@
           this.$http.post('/getAllUserListQuery').then(function (res) {
             let list = JSON.parse(JSON.stringify(res.data.list))
             list = list.reverse()
+            //最后位+1
             that.inputForm.PXH = list[list.length - 1].PXH + 1;
           })
 
         },
         methods: {
-          submitForm($event){
+          submitForm($event) {
             event.preventDefault();
-            console.log(this.OPERA_CODE);
-          }
+            let that = this
+            let config = {
+              headers: {
+                'dataType': 'json'
+              }
+            }
+            this.inputForm.CSRQ = moment(this.$refs.date.value).format('YYYYMMDD');
+            if ((this.verify_YHKL === this.inputForm.YHKL) &&
+              (this.inputForm.YHID.length != 0) &&
+              (this.inputForm.YHKL.length != 0) &&
+              (this.inputForm.YHXM.length != 0)
+            ) {
+              this.inputForm.YHDM = this.inputForm.DWDM + this.inputForm.YHID;
+              console.log(this.inputForm);
+              this.$http.post('/insertUser', this.inputForm, config).then(function (res) {
+                if (res.data.status_code === 1) {
+                  //1为成功
+                  this.window.location.href = (res.data.route) //route为后端给
+                } else {
+                  //不成功输出后端提示
+                  console.log(res.data.message);
+                }
+              })
+
+            } else {
+              console.log('error');
+            }
+
+          },
 
 
         }

@@ -162,8 +162,9 @@ router.get('/edit', function (req, res) {
     }
 })
 
-
+//修改操作请求
 router.post('/edit', async function (req, res) {
+    // 
     if (req.session.isLogin) {
         res.status(200).json({
             status_code: 1,
@@ -175,6 +176,8 @@ router.post('/edit', async function (req, res) {
 
 
 
+
+//登出请求
 router.post('/logout', async function (req, res) {
     delete req.session.user
     delete req.session.isLogin
@@ -182,6 +185,21 @@ router.post('/logout', async function (req, res) {
         status_code: 1,
         route: '/'
     });
+})
+
+
+//用户数据插入
+router.post('/insertUser', async function (req, res) {
+    if (req.session.isLogin) {
+        // console.log(req.body);
+        let content = req.body
+        res.status(200).json({
+            status_code: 1,
+            message: 'ok',
+            list: await mysql.query(`INSERT INTO t_user (YHDM,DWDM,YHID,YHXM,YHKL,YHXB,YHBM,CSRQ,DJSJ,SFJY,PXH) VALUES('${content.YHDM}','${content.DWDM}','${content.YHID}','${content.YHXM}','${content.YHKL}','${content.YHXB}','${content.YHBM}','${content.CSRQ}','2020-10-01 05:05:02','${content.SFJY}',${content.PXH} );`),
+            route: '/manage',
+        });
+    }
 })
 
 
