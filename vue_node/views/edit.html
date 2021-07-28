@@ -5,200 +5,186 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
-
-  <title>评价描述页</title>
-
-
-
+  <meta name="author" content="杜杰燊">
+  <meta name="generator" content="杜杰燊">
+  <title>基本信息</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
 
   <!-- Custom styles for this template -->
-  <link href="/css/edit.css" rel="stylesheet">
+  <link href="/public/css/edit.css" rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body>
 
-  <div class="container">
-    <div class="py-2 text-center">
+  <form class="form-signin border rounded" id="app">
+    <div class="text-center mb-4">
+      <h1 class="h3 mb-3 font-weight-normal">基本信息</h1>
     </div>
-    <h2 class="mb-3">基本信息</h2>
-    <form class="needs-validation" novalidate>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label>用户ID</label>
-          <input type="text" class="form-control" id="firstName" placeholder="目标姓名" value="" required>
-          <div class="invalid-feedback">
-            输入目标对象姓名
-          </div>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label>姓名</label>
-          <input type="text" class="form-control" id="lastName" placeholder="" value="($前台获取姓名)">
-          <div class="invalid-feedback">
-            Valid last name is required.
-          </div>
-        </div>
-      </div>
 
-      <div class="mb-3">
-        <label for="">口令</label>
-        <input type="password" class="form-control" id="address" placeholder="" required>
+
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="objectName">用户ID *</label>
+        <input type="text" class="form-control" id="firstName" value="" required>
         <div class="invalid-feedback">
-          Please enter your shipping address.
+          输入目标对象姓名
         </div>
       </div>
-
-      <div class="mb-3">
-        <label for="address2">确认口令 </label>
-        <input type="password" class="form-control" id="address2" placeholder="">
-      </div>
-      
-
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label for="periods">工作时间</label>
-          <select class="custom-select d-block w-100" id="periods" required>
-            <option value="">选择周期...</option>
-            <option>2021.1.1-2021.1.8</option>
-            <option>2021.1.8-2021.1.15</option>
-          </select>
-          <div class="invalid-feedback">
-            请选择一个工作周期.
-          </div>
-        </div>
-        <div class="col-md-5 mb-3">
-          <label for="state">部门</label>
-          <select class="custom-select d-block w-100" id="state" required>
-            <option value="">选择部门...</option>
-            <option>人事</option>
-            <option>开发</option>
-            <option>需求</option>
-            <option>后勤</option>
-
-          </select>
-          <div class="invalid-feedback">
-            Please provide a valid state.
-          </div>
-        </div>
-        <div class="col-md-3 mb-3">
-          <label for="options">待开发？</label>
-          <input type="text" class="form-control" id="options" placeholder="后续跟进" readonly>
-          <div class="invalid-feedback">
-            Zip code required.
-          </div>
+      <div class="col-md-4 mb-3">
+        <label for="objectName">口令 *</label>
+        <input type="text" class="form-control" id="firstName" value="" required>
+        <div class="invalid-feedback">
+          输入目标对象姓名
         </div>
       </div>
-
-      <hr class="mb-4">
-      <div class="mb-3">
-        <h5 for="work">工作情况</h5>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">安排</span>
-          </div>
-          <input type="text" class="form-control" id="username" placeholder="" required>
-          <div class="invalid-feedback" style="width: 100%;">
-            Your username is required.
-          </div>
+      <div class="col-md-4 mb-3">
+        <label for="objectName">确认口令 *</label>
+        <input type="text" class="form-control" id="firstName" value="" required>
+        <div class="invalid-feedback">
+          输入目标对象姓名
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-3 mb-3">
-          <label for="periods">进度</label>
-          <input type="text" class="form-control" id="progress" placeholder="进度描述" value="" required>
-        </div>
-        <div class="col-md-9 mb-3">
-          <label for="periods">质量</label>
-          <input type="text" class="form-control" id="options" placeholder="质量描述" required>
-          <div class="invalid-feedback">
-            Zip code required.
-          </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="objectName">姓名 *</label>
+        <input type="text" class="form-control" id="firstName" value="" required>
+        <div class="invalid-feedback">
+          输入目标对象姓名
         </div>
       </div>
-      <hr class="mb-4">
-      <h5 for="study">学习情况</h5>
-      <div class="mb-3">
-        <label for="study">有无请教问题</label>
-
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <div class="input-group-text">
-              <input type="checkbox" aria-label="Checkbox for following text input">
+      <div class="col-md-4 mb-3">
+        <label for="objectName">性别</label>
+        <select class="custom-select d-block w-100" id="state" required>
+          <option v-for='(gender,index) in genderList'>{{gender.MC}}</option>
+        </select>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="objectName">部门</label>
+        <select class="custom-select d-block w-100" id="state" required>
+          <option v-for='(depart,index) in departmentsList'>{{depart.BMMC}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="objectName">出生日期</label>
+        <input type="text" class="form-control" id="firstName" value="">
+        <div class="invalid-feedback">
+          输入目标对象姓名
+        </div>
+      </div>
+      <div class="col-md-2 mb-3">
+        <label for="objectName">排序号</label>
+        <input type="text" class="form-control" id="firstName" v-model='inputForm.PXH' readonly>
+        <div class="invalid-feedback">
+          输入目标对象姓名
+        </div>
+      </div>
+      <!-- <div class="col-md-4 mb-3 text_aera">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="save-info">
+              <label class="custom-control-label" for="save-info">禁用</label>
             </div>
-          </div>
-          <textarea class="form-control" aria-label="With textarea" placeholder=""></textarea>
-        </div>
-
-
-        <hr class="mb-4">
-        <div class="mb-3">
-          <h5 for="study">工作态度</h5>
-          <div class="input-group">
-
-
-            <select class="custom-select d-block w-100 col-md-4 mb-3" id="periods" required>
-              <option value="">中性</option>
-              <option>积极</option>
-              <option>消极</option>
-            </select>
-            <div class="invalid-feedback">
-              请选择一个工作周期.
-            </div>
-
-
-          </div>
-        </div>
-        <div class="mb-3">
-          <div class="input-group">
-            <input type="text" class="form-control" id="username" placeholder="举例说明" required>
-            <div class="invalid-feedback" style="width: 100%;">
-              Your username is required.
-            </div>
-          </div>
-        </div>
-        <hr class="mb-4">
-        <h5 for="study">提升空间</h5>
-        <div class="input-group">
-          <textarea class="form-control" aria-label="With textarea"></textarea>
-        </div>
-
-
-        <!-- <hr class="mb-4">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="isComments">
-          <label class="custom-control-label" for="isComments">本周是否需要评价</label>
-        </div> -->
-        <hr class="mb-4">
-        <div class="mb-3">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">$带教老师名.整体评价</span>
-            </div>
-            <textarea class="form-control" aria-label="With textarea"></textarea>
-          </div>
-        </div>
-
-
-        <hr class="mb-4">
-        <div class="row btn_aera text-center">
-          {{ if (FUNC_CODE == 1)}}
-          <div class="col-md-2 mb-3">
-              <button class="btn btn-lg btn-primary btn-block" >保存</button>
-          </div>
-          {{ /if }}
-     
-          <div class="col-md-2 mb-3">
-              <button class="btn btn-lg btn-primary btn-block" >返回</button>
-          </div>
-          <!-- <div class="col-md-2 mb-3">
-              <router-link to="/foo">Go to Foo</router-link>
           </div> -->
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" class="custom-control-input" id="save-info">
+      <label class="custom-control-label" for="save-info">禁用</label>
+    </div>
 
+
+    <div class="row btn_aera">
+      {{ if (FUNC_CODE == 1)}}
+      <div class="col-md-2 mb-3">
+        <button class="btn btn-lg btn-primary btn-block" @click="submitForm($event)">保存</button>
       </div>
-    </form>
-  </div>
+      {{ /if }}
+      <div class="col-md-2 mb-3">
+        <button class="btn btn-lg btn-primary btn-block">返回</button>
+      </div>
+      <!-- <div class="col-md-2 mb-3">
+                <router-link to="/foo">Go to Foo</router-link>
+            </div> -->
+
+    </div>
+
+
+  </form>
+
+
+
+  <script src="node_modules/vue/dist/vue.js"></script>
+  <script src="node_modules/axios/dist/axios.js"></script>
+
+  <script>
+    window.onload = function () {
+      Vue.prototype.$http = axios;
+      const app = new Vue({
+        // router,
+        data: {
+          inputForm: {
+            userID: '',
+            password: '',
+            PXH: ''
+          },
+          departmentsList: '', //部门列表
+          genderList: ''
+        },
+        //create生命周期自动生成部门列表
+        created: function () {
+          let that = this;
+          //部门列表制作
+          this.$http.post('/getDepartListQuery').then(function (res) {
+            that.departmentsList = res.data.list;
+          })
+          //性别列表制作
+          this.$http.post('/getGenderListQuery').then(function (res) {
+            that.genderList = res.data.list;
+          })
+          //排序号制作
+          this.$http.post('/getAllUserListQuery').then(function (res) {
+            let list = JSON.parse(JSON.stringify(res.data.list))
+            list = list.reverse()
+            that.inputForm.PXH = list[list.length - 1].PXH + 1;
+          })
+
+        },
+        methods: {
+
+
+
+        }
+      }).$mount('#app')
+    }
+  </script>
+
+
 </body>
 
 </html>

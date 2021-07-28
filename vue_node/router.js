@@ -1,11 +1,4 @@
 var express = require('express')
-// var User = require('./model/user')
-// var Comment = require('./model/comments')
-// var md5 = require('blueimp-md5')
-// const user = require('./model/user')
-// const cmts = require('./model/comments')
-// const consolep = require('./public/js/console')
-// const { nextTick } = require('process')
 const mysql = require('./utilities/untity-mysql')
 
 
@@ -126,7 +119,14 @@ router.post('/getDepartUserListQuery', async function (req, res) {
         list: await mysql.query(`SELECT * FROM \`t_user\` where YHBM='${content.BMDM}'`)
     });
 })
-
+//性别列表
+router.post('/getGenderListQuery', async function (req, res) {
+    res.status(200).json({
+        status_code: 0,
+        message: 'ok',
+        list: await mysql.query('SELECT * FROM `ts_bzdm`')
+    });
+})
 
 
 router.post('/test', async function (req, res) {
@@ -144,7 +144,14 @@ router.get('/edit', function (req, res) {
             res.render('edit.html', {
                 name: 'Master',
                 //func_code渲染功能
-                FUNC_CODE: req.query.code
+                FUNC_CODE: req.query.code,
+                index: "{{index}}",
+                depart: {
+                    BMMC: '{{depart.BMMC}}'
+                },
+                gender: {
+                    MC: '{{gender.MC}}'
+                },
             })
         } else {
             //回登录页
@@ -160,7 +167,7 @@ router.post('/edit', async function (req, res) {
     if (req.session.isLogin) {
         res.status(200).json({
             status_code: 1,
-            route: '/edit?code=2'
+            route: '/edit?code=1',
         });
     }
 
