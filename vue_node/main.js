@@ -15,7 +15,7 @@ const serverport = 5000 //端口地址
 
 
 
-var app = express()
+var app = express() 
 
 //可访问资源库
 app.use('/public/', express.static(path.join(__dirname, './public/')))

@@ -170,6 +170,9 @@
             },
             //create生命周期自动生成部门列表
             created: function () {
+
+            },
+            mounted: function () {
                 let that = this;
                 let config = {
                     headers: {
@@ -196,9 +199,8 @@
                         }
                     }
                     this.$http.post('/getDepartUserListQuery', departID, config).then(function (res) {
-                        //部门列表                    
+                        //部门列表
                         let list = JSON.parse(JSON.stringify(res.data.list))
-                        list = list.reverse()
                         that.users = list.sort(function (x, y) {
                             return y.PXH - x.PXH
                         })

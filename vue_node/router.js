@@ -1,6 +1,7 @@
 var express = require('express')
 const mysql = require('./utilities/untity-mysql')
 const check = require('./utilities/credential.js')
+const trans = require('./utilities/translate.js')
 
 var router = express.Router()
 
@@ -86,12 +87,11 @@ router.get('/manage', function (req, res) {
 //     console.log(person);
 // })
 
-router.get('/test2', function (req, res) {
-
-    // check.IDcheck('asd')
-    // res.render('test.html', {
-    //     name: 'Master'
-    // })
+router.get('/test2', async function (req, res) {
+    let list = await mysql.query('SELECT * FROM t_user')
+    
+    trans.listTrans(list)
+    res.end('success')
 })
 
 
@@ -142,6 +142,7 @@ router.post('/test', async function (req, res) {
     // res.render('register.html', {
     //     name: 'Master'
     // })
+
 })
 
 //修改页

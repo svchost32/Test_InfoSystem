@@ -83,13 +83,13 @@
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">性别</label>
-        <select class="custom-select d-block w-100" ref='gender'>
+        <select class="custom-select d-block w-100" ref='gender' v-bind:value='pre.YHXB'>
           <option v-for='(gender,index) in genderList'>{{gender.MC}}</option>
         </select>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">部门</label>
-        <select class="custom-select d-block w-100" ref='depart'>
+        <select class="custom-select d-block w-100" ref='depart' v-bind:value='pre.YHBM'>
           <option v-for='(depart,index) in departmentsList'>{{depart.BMMC}}</option>
         </select>
       </div>
@@ -100,7 +100,7 @@
         <div class="row">
           <div class="col-sm-12">
             <input type="text" class="form-control datetimepicker-input" id="datetimepicker5"
-              data-toggle="datetimepicker" data-target="#datetimepicker5" ref='date' />
+              data-toggle="datetimepicker" data-target="#datetimepicker5" ref='date' v-bind:value='pre.CSRQ' />
           </div>
         </div>
       </div>
@@ -119,7 +119,7 @@
           </div> -->
     </div>
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" class="custom-control-input" id="save-info" v-model='inputForm.SFJY'>
+      <input type="checkbox" class="custom-control-input" id="save-info" v-bind:value='pre.SFJY'>
       <label class="custom-control-label" for="save-info">禁用</label>
     </div>
 
@@ -183,14 +183,21 @@
             SFJY: false,
             PXH: ''
           },
+          pre: {
+            CSRQ: '',
+            YHXB:'',
+            YHBM: '',
+            SFJY:''
+            
+          },
           departmentsList: '', //部门列表
           genderList: ''
         },
         watch: {
 
         },
-        //create生命周期自动生成部门列表
-        created: function () {
+        //mounted生命周期自动生成部门列表
+        mounted: function () {
           let that = this;
           //部门列表制作
           this.$http.post('/getDepartListQuery').then(function (res) {
@@ -206,9 +213,9 @@
             list = list.reverse()
             //先正序最后位+1
 
-            
+
             that.inputForm.PXH = list.sort(function (x, y) {
-              return y.PXH - x.PXH 
+              return y.PXH - x.PXH
             })[0].PXH + 1
             // console.log(list);
 
@@ -228,13 +235,19 @@
               // that.users = res.data.list;
               let data = res.data.list[0];
               that.inputForm = data
+              that.pre.YHBM = '办公室'
+              that.pre.YHXB = '女'
+              that.pre.CSRQ = '1234531'
               // console.log(data.CSRQ);
               // console.log(that.$ref.date.value);
               // that.$ref.date.value = data.CSRQ
-              
+
               // console.log(res.data.list);
             })
           }
+
+        },
+        computed: {
 
         },
         methods: {
@@ -249,7 +262,7 @@
             this.inputForm.CSRQ = moment(this.$refs.date.value).format('YYYYMMDD');
             this.inputForm.YHXB = this.$refs.gender.value;
             this.inputForm.YHBM = this.$refs.depart.value;
-            this.inputForm.SFJY = (false == this.inputForm.SFJY ? 0 : 1); //是否禁用输出0or1
+            this.inputForm.SFJY = (false == this.pre.SFJY ? 0 : 1); //是否禁用输出0or1
             if ((this.verify_YHKL === this.inputForm.YHKL) &&
               (this.inputForm.YHID.length != 0) &&
               (this.inputForm.YHKL.length != 0) &&
