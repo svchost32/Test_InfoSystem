@@ -1,0 +1,136 @@
+.mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    background: #000;
+    opacity: 0.3;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+}
+
+.dialog-box {
+    width: 280px;
+    height: 200px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -140px;
+    margin-top: -100px;
+    font-weight: bold;
+    background: #fff;
+    z-index: 10001;
+    border-radius: 4px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+}
+
+.dialog-msg {
+    text-align: center;
+    color: #4A6075;
+    line-height: 26px;
+    width: 250px;
+    margin: 0 auto;
+    padding-left: 14px;
+    height: 52px;
+    display: inline-block;
+}
+
+.i-know {
+    position: absolute;
+    margin-top: 18px;
+    margin-left: 70px;
+    text-align: center;
+}
+
+.i-know a {
+    display: inline-block;
+    height: 30px;
+    width: 140px;
+    color: #fff;
+    line-height: 30px;
+    font-weight: bold;
+    background: #3ABBCD;
+    border-radius: 100px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.dialog-hidden,
+.notify-hidden,
+.confirm-hidden {
+    display: none;
+}
+
+.dialog-close-btn {
+    background: url("/images/closebtn.svg") no-repeat center;
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.dialog-confirm-icon {
+    width: 60px;
+    height: 60px;
+    background: url("/images/successBig.svg") no-repeat center;
+    margin: -30px auto 45px auto;
+}
+
+.dialog-notify-icon {
+    width: 60px;
+    height: 60px;
+    background: url("/images/notifyBig.svg") no-repeat center;
+    margin: -30px auto 45px auto;
+}
+
+.dialog-warning-icon {
+    width: 60px;
+    height: 60px;
+    background: url("/images/warningBig.svg") no-repeat center;
+    margin: -30px auto 45px auto;
+}
+
+.dialog-btn-box {
+    position: absolute;
+    margin-top: 18px;
+    margin-left: 28px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.dialog-cancel-btn {
+    display: inline-block;
+    height: 30px;
+    width: 100px;
+    color: #888 !important;
+    line-height: 30px;
+    font-weight: bold;
+    background: #DEE4EA;
+    border-radius: 100px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.dialog-confirm-btn {
+    display: inline-block;
+    height: 30px;
+    width: 100px;
+    color: #fff !important;
+    line-height: 30px;
+    font-weight: bold;
+    background: #3ABBCD;
+    border-radius: 100px;
+    vertical-align: middle;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.hidden-btn {
+    opacity: 0;
+    position: absolute;
+}

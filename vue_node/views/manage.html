@@ -123,7 +123,7 @@
                             <tbody class="w-100">
                                 <tr v-for="(user,index) in users" class="row mx-0">
                                     <td class="col-1">{{user.PXH}}</td>
-                                    <td class="col-1">查</td>
+                                    <td class="col-1" @click="audit(user.YHID)">查</td>
                                     <td class="col-1">删</td>
                                     <td class="col-1">改</td>
                                     <td class="col-2">{{user.YHXM}}</td>
@@ -145,6 +145,7 @@
 </body>
 <script src="node_modules/vue/dist/vue.js"></script>
 <script src="node_modules/axios/dist/axios.js"></script>
+<script src="/public/widget/sort/sort.js"></script>
 <!-- <script src="/public/js/manage.js"></script> -->
 <script>
     window.onload = function () {
@@ -156,6 +157,16 @@
                 departmentsList: '', //部门列表
                 current_depart: null, //部门被单击选项
 
+            },
+            watch: {
+                users: { //深度监听，可监听到对象、数组的变化
+                    handler(val, oldVal) {
+                        // val = val.sort(function (x, y) {
+                        //     return x.PXH < y.PXH ? x.PXH : y.PXH
+                        // })
+                    },
+                    deep: true //true 深度监听
+                }
             },
             //create生命周期自动生成部门列表
             created: function () {
@@ -187,6 +198,7 @@
                     this.$http.post('/getDepartUserListQuery', departID, config).then(function (res) {
                         //部门列表                            
                         that.users = res.data.list;
+                        that.users = that.users.sort((x, y) => x.PXH > y.PXH ? x.PXH : y.PXH)
                     })
 
                 },
@@ -203,7 +215,10 @@
                     if (this.idSearch.length == 0) {
                         //没输入搜全部
                         this.$http.post('/getAllUserListQuery', '', config).then(function (res) {
-                            that.users = res.data.list;
+                            // that.users = res.data.list;
+                            // console.log(that.users);
+                            that.users = res.data.list.sort((x, y) => x.PXH > y.PXH ? x.PXH : y.PXH)
+                            console.log(that.users);
                         })
                     } else {
                         let ids = {
@@ -216,8 +231,16 @@
                     }
                 },
 
+
+                //编辑
                 edit: function () {
                     this.$http.post('/edit').then(function (res) {
+                        this.window.location.href = (res.data.route) //route为后端给
+                    })
+                },
+                //查看
+                audit: function (index) {
+                    this.$http.post('/audit',index).then(function (res) {
                         this.window.location.href = (res.data.route) //route为后端给
                     })
                 },
@@ -233,6 +256,7 @@
                 sort: function () {
                     this.users.reverse();
                 },
+                
 
                 //点部门让选择取消
                 defaultDepart: function () {

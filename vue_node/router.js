@@ -1,12 +1,6 @@
 var express = require('express')
 const mysql = require('./utilities/untity-mysql')
-
-
-const Vue = require('vue')
-const fs = require('fs')
-const template = require('express-art-template')
-
-const renderer = require('vue-server-renderer').createRenderer()
+const check = require('./utilities/credential.js')
 
 var router = express.Router()
 
@@ -25,7 +19,10 @@ router.get('/', function (req, res) {
 
 //登陆方法
 router.post('/login', async function (req, res) {
-    if (req.body.userID === 'jason') {
+
+    if (await check.IDcheck(req.body.userID) &&
+        await check.PWCheck(req.body.userID, req.body.password)
+    ) {
         req.session.isLogin = true;
         res.status(200).json({
             status_code: 1,
@@ -78,13 +75,22 @@ router.get('/manage', function (req, res) {
 
 })
 
-router.get('/test2', async function (req, res) {
-    const list = await mysql.query('SELECT * FROM `ts_bzdm`')
-    var person = list.filter((p) => {
-        return p.MC = '男';
-    })
-    console.log(person);
+// router.get('/test2', async function (req, res) {
+//     const list = await mysql.query('SELECT * FROM `ts_bzdm`')
+//     var person = list.filter((p) => {
+//         return p.MC = '男';
+//     })
+//     console.log(person);
+// })
+
+router.get('/test2', function (req, res) {
+
+    // check.IDcheck('asd')
+    // res.render('test.html', {
+    //     name: 'Master'
+    // })
 })
+
 
 //所有用户列表
 router.post('/getAllUserListQuery', async function (req, res) {
@@ -138,13 +144,13 @@ router.post('/test', async function (req, res) {
 //修改页
 router.get('/edit', function (req, res) {
     //触发了
-    let code = req.query.code
+    let code = req.session.code
     if (req.session.isLogin) {
         if (code == 1 || code == 2 || code == 3) {
             res.render('edit.html', {
                 name: 'Master',
                 //func_code渲染功能
-                FUNC_CODE: req.query.code,
+                FUNC_CODE: code,
                 index: "{{index}}",
                 depart: {
                     BMMC: '{{depart.BMMC}}'
@@ -158,7 +164,7 @@ router.get('/edit', function (req, res) {
             res.redirect('/')
         }
     } else {
-        res.redirect('/')
+        res.redirect('/logout')
     }
 })
 
@@ -166,20 +172,49 @@ router.get('/edit', function (req, res) {
 router.post('/edit', async function (req, res) {
     // 
     if (req.session.isLogin) {
+        req.session.code = 1
         res.status(200).json({
             status_code: 1,
-            route: '/edit?code=1',
+            route: '/edit',
         });
     }
-
 })
 
+//查看
+router.post('/audit', async function (req, res) {
+    // 
+    // console.log(Object.keys(req.body)[0]);
+    if (req.session.isLogin) {
+        req.session.code = 2
+        req.session.YHID = Object.keys(req.body)[0]
+        res.status(200).json({
+            status_code: 1,
+            route: '/edit',
+        });
+    }
+})
+
+//返回
+router.post('/back', async function (req, res) {
+    // 
+    // console.log(Object.keys(req.body)[0]);
+    delete req.session.code
+    delete req.session.YHID
+    if (req.session.isLogin) {
+        res.status(200).json({
+            status_code: 1,
+            route: '/manage',
+        });
+    }
+})
 
 
 
 //登出请求
 router.post('/logout', async function (req, res) {
     delete req.session.user
+    delete req.session.code
+    delete req.session.YHID
     delete req.session.isLogin
     res.status(200).json({
         status_code: 1,
@@ -190,9 +225,14 @@ router.post('/logout', async function (req, res) {
 
 //用户数据插入
 router.post('/insertUser', async function (req, res) {
+    // console.log('insert');
     if (req.session.isLogin) {
         // console.log(req.body);
         let content = req.body
+        let YHXB = await mysql.query(`SELECT CODE from ts_bzdm where MC='${content.YHXB}'`)
+        let YHBM = await mysql.query(`SELECT BMDM from t_depart where BMMC='${content.YHBM}'`)
+        content.YHXB = YHXB[0].CODE
+        content.YHBM = YHBM[0].BMDM
         // console.log(content);
         res.status(200).json({
             status_code: 1,
@@ -202,6 +242,9 @@ router.post('/insertUser', async function (req, res) {
         });
     }
 })
+
+
+
 
 
 

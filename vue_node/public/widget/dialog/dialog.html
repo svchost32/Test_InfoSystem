@@ -1,0 +1,15 @@
+<div :class="isHD">
+    <div class="mask"></div>
+    <div class="dialog-box">
+        <div class="dialog-close-btn" @click="IKonw()"></div>
+        <div :class="dialogIcon"></div>
+        <p class="dialog-msg">{{msg}}</p>
+        <div class="i-know" :class="notifyHidden" @click="confirm()">
+            <a type="button">{{confirmName}}</a>
+        </div>
+        <div class="dialog-btn-box" :class="confirmHidden">
+            <a type="button" class="dialog-cancel-btn" @click="IKonw()">{{cancelName}}</a>
+            <a type="button" class="dialog-confirm-btn" @click="confirm()">{{confirmName}}</a>
+        </div>
+    </div>
+</div>

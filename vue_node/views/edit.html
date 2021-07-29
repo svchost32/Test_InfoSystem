@@ -81,13 +81,13 @@
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">性别</label>
-        <select class="custom-select d-block w-100">
+        <select class="custom-select d-block w-100" ref='gender'>
           <option v-for='(gender,index) in genderList'>{{gender.MC}}</option>
         </select>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">部门</label>
-        <select class="custom-select d-block w-100">
+        <select class="custom-select d-block w-100" ref='depart'>
           <option v-for='(depart,index) in departmentsList'>{{depart.BMMC}}</option>
         </select>
       </div>
@@ -129,7 +129,7 @@
       </div>
       {{ /if }}
       <div class="col-md-2 mb-3">
-        <button class="btn btn-lg btn-primary btn-block">返回</button>
+        <button class="btn btn-lg btn-primary btn-block" @click="back($event)">返回</button>
       </div>
       <!-- <div class="col-md-2 mb-3">
                 <router-link to="/foo">Go to Foo</router-link>
@@ -172,14 +172,17 @@
             YHID: '',
             YHXM: '',
             YHKL: '',
-            YHXB: '09_00003-1',
-            YHBM: '32010003',
+            YHXB: '',
+            YHBM: '',
             CSRQ: '',
-            SFJY: '0',
+            SFJY: false,
             PXH: ''
           },
           departmentsList: '', //部门列表
           genderList: ''
+        },
+        watch: {
+
         },
         //create生命周期自动生成部门列表
         created: function () {
@@ -196,8 +199,11 @@
           this.$http.post('/getAllUserListQuery').then(function (res) {
             let list = JSON.parse(JSON.stringify(res.data.list))
             list = list.reverse()
-            //最后位+1
-            that.inputForm.PXH = list[list.length - 1].PXH + 1;
+            //先正序最后位+1
+            that.inputForm.PXH = list.sort(function (x, y) {
+              return x.PXH < y.PXH ? x.PXH : y.PXH
+            })[0].PXH + 1
+
           })
 
         },
@@ -211,6 +217,9 @@
               }
             }
             this.inputForm.CSRQ = moment(this.$refs.date.value).format('YYYYMMDD');
+            this.inputForm.YHXB = this.$refs.gender.value;
+            this.inputForm.YHBM = this.$refs.depart.value;
+            this.inputForm.SFJY = (false == this.inputForm.SFJY ? 0 : 1); //是否禁用输出0or1
             if ((this.verify_YHKL === this.inputForm.YHKL) &&
               (this.inputForm.YHID.length != 0) &&
               (this.inputForm.YHKL.length != 0) &&
@@ -233,8 +242,19 @@
             }
 
           },
+          back($event) {
+            event.preventDefault();
+            this.$http.post('/back').then(function (res) {
+              if (res.data.status_code === 1) {
+                //1为成功
+                this.window.location.href = (res.data.route) //route为后端给
+              } else {
+                //不成功输出后端提示
+                console.log(res.data.message);
+              }
+            })
 
-
+          }
         }
       }).$mount('#app')
     }

@@ -1,27 +1,173 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<!doctype html>
+<html lang="zh-CN">
 
-<div id="app">
-  <h1>Hello App!</h1>
-  <p>
-    <!-- 使用 router-link 组件来导航. -->
-    <!-- 通过传入 `to` 属性指定链接. -->
-    <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
-    <router-link to="/foo">Go to Foo</router-link>
-    <router-link to="/bar">Go to Bar</router-link>
-  </p>
-  <!-- 路由出口 -->
-  <!-- 路由匹配到的组件将渲染在这里 -->
-  <router-view></router-view>
-</div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="杜杰燊">
+  <meta name="generator" content="杜杰燊">
+  <title>登录页</title>
+
+  <!-- Bootstrap core CSS -->
+
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/public/widget/dialog/test.css">
+  <!-- <link rel="stylesheet" href="public/widget/alert/alert.css"> -->
+
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="/public/css/login.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <form class="form-signin border rounded" id="app">
+    <div class="text-center mb-4">
+      <h1 class="h3 mb-3 font-weight-normal">用户登录</h1>
+    </div>
+
+    <div class="row form_title">
+      <div class="col-md-4 mb-3 text_aera">
+        <img class="mb-4 border" src="/public/img/defaultuser.png" alt="" width="100" height="100">
+      </div>
+      <div class="col-md-8 mb-3 ">
+        <div class="row">
+          <div class="col-md-9 mb-3">
+            <div class="form-label-group">
+              <input class="form-control" placeholder="用户ID" v-model="inputform.userID" required autofocus>
+              <label>用户名</label>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3 text_aera">
+            <label>
+              <input type="checkbox" value="saveID"> 保存账户
+            </label>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-9 mb-3">
+            <div class="form-label-group">
+              <input type='password' class="form-control" placeholder="密码" v-model="inputform.password" required>
+              <label for="password">口令</label>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3 text_aera">
+            <label>
+              <input type="checkbox" value="savePW"> 保存口令
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div @click="openMask">打开弹窗</div>
+    <dialog-bar v-model="sendVal" type="danger" title="我是标题" content="我是内容" v-on:cancel="clickCancel()"
+      @danger="clickDanger()" @confirm="clickConfirm()" dangerText="Delete"></dialog-bar>
+
+      <modal-box :visible.sync="CreateVisible" :options="CreateOptions" @Confirm="ConfirmCreateHandler()">
+        </modal-box>
+
+    <div class="row btn_aera">
+      <div class="col-md-auto"></div>
+      <div class="col-md-2 mb-3">
+        <button class="btn btn-lg btn-primary btn-block" @click="submitForm($event)">登录</button>
+      </div>
+      <div class="col-md-auto"></div>
+      <div class="col-md-2 mb-3">
+        <button class="btn btn-lg btn-primary btn-block" v-on:click="reset">重置</button>
+      </div>
+      <!-- <div class="col-md-2 mb-3">
+                <router-link to="/foo">Go to Foo</router-link>
+            </div> -->
+
+    </div>
+
+
+  </form>
+
+
+
+  <script src="node_modules/vue/dist/vue.js"></script>
+  <script src="node_modules/axios/dist/axios.js"></script>
+  <!-- <script src="/public/widget/alert/alert.js"></script> -->
+  <script src="/public/widget/dialog/test.js"></script>
+
+  <script>
+    window.onload = function () {
+      Vue.prototype.$http = axios;
+      const app = new Vue({
+        el: '#app',
+        // router,
+        data: {
+          inputform: {
+            userID: '',
+            password: '',
+          },
+          sendVal: false,
+          msg: '',
+
+        },
+        components: {
+
+        },
+        methods: {
+          login: function () {},
+          reset: function () {
+            // dialog.init()
+            var t = this
+            $confirm.alert({
+              title: '你确定删除吗?',
+              content: '删除不可以恢复...',
+              onOk: function () {
+                t.msg = '你刚点了确定'
+              },
+              onCancel: function () {
+                t.msg = '你刚点了取消'
+              }
+            })
+          },
+
+          click() {
+            var t = this
+            $confirm.alert({
+              title: '你确定删除吗?',
+              content: '删除不可以恢复...',
+              onOk: function () {
+                t.msg = '你刚点了确定'
+              },
+              onCancel: function () {
+                t.msg = '你刚点了取消'
+              }
+            })
+          }
+
+
+        }
+      })
+    }
+  </script>
+
+
 </body>
+
 </html>
