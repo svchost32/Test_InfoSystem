@@ -61,6 +61,7 @@
           输入目标对象姓名
         </div>
       </div>
+      {{ if (FUNC_CODE != 3)}}
       <div class="col-md-4 mb-3">
         <label for="objectName">确认口令 *</label>
         <input type="password" class="form-control" v-model='verify_YHKL' required>
@@ -68,6 +69,7 @@
           输入目标对象姓名
         </div>
       </div>
+      {{/if}}
     </div>
 
 
@@ -123,7 +125,7 @@
 
 
     <div class="row btn_aera">
-      {{ if (FUNC_CODE == 1)}}
+      {{ if (FUNC_CODE != 3)}}
       <div class="col-md-2 mb-3">
         <button class="btn btn-lg btn-primary btn-block" @click="submitForm($event)">保存</button>
       </div>
@@ -131,6 +133,9 @@
       <div class="col-md-2 mb-3">
         <button class="btn btn-lg btn-primary btn-block" @click="back($event)">返回</button>
       </div>
+      <!-- <div class="col-md-2 mb-3">
+        <button class="btn btn-lg btn-primary btn-block" @click="test">测试</button>
+      </div> -->
       <!-- <div class="col-md-2 mb-3">
                 <router-link to="/foo">Go to Foo</router-link>
             </div> -->
@@ -169,7 +174,7 @@
           inputForm: {
             YHDM: '',
             DWDM: '000000',
-            YHID: '',
+            YHID: '{{YHID}}',
             YHXM: '',
             YHKL: '',
             YHXB: '',
@@ -200,11 +205,36 @@
             let list = JSON.parse(JSON.stringify(res.data.list))
             list = list.reverse()
             //先正序最后位+1
+
+            
             that.inputForm.PXH = list.sort(function (x, y) {
-              return x.PXH < y.PXH ? x.PXH : y.PXH
+              return y.PXH - x.PXH 
             })[0].PXH + 1
+            // console.log(list);
 
           })
+          if (this.OPERA_CODE != 1) {
+            let that = this
+            let ids = {
+              id: '{{YHID}}'
+            }
+            let config = {
+              headers: {
+                'dataType': 'json'
+              }
+            }
+            //输入搜具体人
+            this.$http.post('/getUserQuery', ids, config).then(function (res) {
+              // that.users = res.data.list;
+              let data = res.data.list[0];
+              that.inputForm = data
+              // console.log(data.CSRQ);
+              // console.log(that.$ref.date.value);
+              // that.$ref.date.value = data.CSRQ
+              
+              // console.log(res.data.list);
+            })
+          }
 
         },
         methods: {
@@ -254,6 +284,10 @@
               }
             })
 
+          },
+          test($event) {
+            event.preventDefault();
+            // this.$refs.date.value = 'asd';
           }
         }
       }).$mount('#app')

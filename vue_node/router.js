@@ -24,6 +24,8 @@ router.post('/login', async function (req, res) {
         await check.PWCheck(req.body.userID, req.body.password)
     ) {
         req.session.isLogin = true;
+        let name  = await mysql.query(`select YHXM from t_user where YHID = '${req.body.userID}' limit 1;`)
+        req.session.name = name[0].YHXM
         res.status(200).json({
             status_code: 1,
             route: '/manage',
@@ -49,11 +51,12 @@ router.post('/console', function (req, res) {
 
 })
 
-
+//管理页
 router.get('/manage', function (req, res) {
     if (req.session.isLogin) {
         //确认登录
         res.render('manage.html', {
+            name:req.session.name,
             //被render替换掉的vue模板，无奈之举     
             index: "{{index}}",
             depart: {
@@ -145,10 +148,13 @@ router.post('/test', async function (req, res) {
 router.get('/edit', function (req, res) {
     //触发了
     let code = req.session.code
+    let YHID = (req.session.code !=1 && req.session.chooseID != undefined)?
+                req.session.chooseID : ''
+                // console.log(YHID);
     if (req.session.isLogin) {
         if (code == 1 || code == 2 || code == 3) {
             res.render('edit.html', {
-                name: 'Master',
+                // name: req.session.name,
                 //func_code渲染功能
                 FUNC_CODE: code,
                 index: "{{index}}",
@@ -158,6 +164,7 @@ router.get('/edit', function (req, res) {
                 gender: {
                     MC: '{{gender.MC}}'
                 },
+                YHID:YHID,
             })
         } else {
             //回登录页
@@ -168,11 +175,24 @@ router.get('/edit', function (req, res) {
     }
 })
 
-//修改操作请求
-router.post('/edit', async function (req, res) {
+//新增操作请求
+router.post('/add', async function (req, res) {
     // 
     if (req.session.isLogin) {
         req.session.code = 1
+        res.status(200).json({
+            status_code: 1,
+            route: '/edit',
+        });
+    }
+})
+
+//改
+router.post('/edit', async function (req, res) {
+    // 
+    if (req.session.isLogin) {
+        req.session.code = 2
+        req.session.chooseID = Object.keys(req.body)[0]
         res.status(200).json({
             status_code: 1,
             route: '/edit',
@@ -185,8 +205,8 @@ router.post('/audit', async function (req, res) {
     // 
     // console.log(Object.keys(req.body)[0]);
     if (req.session.isLogin) {
-        req.session.code = 2
-        req.session.YHID = Object.keys(req.body)[0]
+        req.session.code = 3
+        req.session.chooseID = Object.keys(req.body)[0]
         res.status(200).json({
             status_code: 1,
             route: '/edit',
@@ -199,7 +219,7 @@ router.post('/back', async function (req, res) {
     // 
     // console.log(Object.keys(req.body)[0]);
     delete req.session.code
-    delete req.session.YHID
+    delete req.session.chooseID
     if (req.session.isLogin) {
         res.status(200).json({
             status_code: 1,
@@ -214,7 +234,7 @@ router.post('/back', async function (req, res) {
 router.post('/logout', async function (req, res) {
     delete req.session.user
     delete req.session.code
-    delete req.session.YHID
+    delete req.session.chooseID
     delete req.session.isLogin
     res.status(200).json({
         status_code: 1,

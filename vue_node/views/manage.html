@@ -50,7 +50,7 @@
             <ul class="navbar-nav px-3">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="btn btn-secondary" @click='search'>查询</button>
-                    <button type="button" class="btn btn-secondary" @click='edit'>新增</button>
+                    <button type="button" class="btn btn-secondary" @click='add'>新增</button>
                     <button type="button" class="btn btn-secondary" @click='logout'>注销</button>
                 </div>
             </ul>
@@ -125,7 +125,7 @@
                                     <td class="col-1">{{user.PXH}}</td>
                                     <td class="col-1" @click="audit(user.YHID)">查</td>
                                     <td class="col-1">删</td>
-                                    <td class="col-1">改</td>
+                                    <td class="col-1 " @click="edit(user.YHID)">改</td>
                                     <td class="col-2">{{user.YHXM}}</td>
                                     <td class="col-2">{{user.YHID}}</td>
                                     <td class="col-3">{{user.YHBM}}</td>
@@ -196,9 +196,12 @@
                         }
                     }
                     this.$http.post('/getDepartUserListQuery', departID, config).then(function (res) {
-                        //部门列表                            
-                        that.users = res.data.list;
-                        that.users = that.users.sort((x, y) => x.PXH > y.PXH ? x.PXH : y.PXH)
+                        //部门列表                    
+                        let list = JSON.parse(JSON.stringify(res.data.list))
+                        list = list.reverse()
+                        that.users = list.sort(function (x, y) {
+                            return y.PXH - x.PXH
+                        })
                     })
 
                 },
@@ -215,10 +218,11 @@
                     if (this.idSearch.length == 0) {
                         //没输入搜全部
                         this.$http.post('/getAllUserListQuery', '', config).then(function (res) {
-                            // that.users = res.data.list;
-                            // console.log(that.users);
-                            that.users = res.data.list.sort((x, y) => x.PXH > y.PXH ? x.PXH : y.PXH)
-                            console.log(that.users);
+                            //排序
+                            let list = JSON.parse(JSON.stringify(res.data.list))
+                            that.users = list.sort(function (x, y) {
+                                return x.PXH - y.PXH
+                            })
                         })
                     } else {
                         let ids = {
@@ -232,15 +236,21 @@
                 },
 
 
-                //编辑
-                edit: function () {
-                    this.$http.post('/edit').then(function (res) {
+                //新增
+                add: function () {
+                    this.$http.post('/add').then(function (res) {
+                        this.window.location.href = (res.data.route) //route为后端给
+                    })
+                },
+                //改
+                edit: function (index) {
+                    this.$http.post('/edit', index).then(function (res) {
                         this.window.location.href = (res.data.route) //route为后端给
                     })
                 },
                 //查看
                 audit: function (index) {
-                    this.$http.post('/audit',index).then(function (res) {
+                    this.$http.post('/audit', index).then(function (res) {
                         this.window.location.href = (res.data.route) //route为后端给
                     })
                 },
@@ -256,7 +266,7 @@
                 sort: function () {
                     this.users.reverse();
                 },
-                
+
 
                 //点部门让选择取消
                 defaultDepart: function () {
