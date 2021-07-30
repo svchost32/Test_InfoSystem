@@ -171,7 +171,19 @@
             },
             //create生命周期自动生成部门列表
             created: function () {
-
+                let that = this;
+                let config = {
+                    headers: {
+                        'dataType': 'json'
+                    }
+                };
+                this.$http.post('/getAllUserListQuery', '', config).then(function (res) {
+                    //排序
+                    let list = JSON.parse(JSON.stringify(res.data.list))
+                    that.users = list.sort(function (x, y) {
+                        return x.PXH - y.PXH
+                    })
+                })
             },
             mounted: function () {
                 let that = this;
@@ -265,7 +277,7 @@
                         onOk: function () {
                             // this.window.location.href = (res.data.route)
                             that.$http.post('/remove', index).then(function (res) {
-                                that.window.location.href = (res.data
+                                this.window.location.href = (res.data
                                     .route) //route为后端给
                             })
                         }
