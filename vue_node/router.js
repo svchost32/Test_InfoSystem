@@ -2,6 +2,7 @@ var express = require('express')
 const mysql = require('./utilities/untity-mysql')
 const check = require('./utilities/credential.js')
 const trans = require('./utilities/translate.js')
+const moment = require('moment')
 
 var router = express.Router()
 
@@ -88,10 +89,12 @@ router.get('/manage', function (req, res) {
 // })
 
 router.get('/test2', async function (req, res) {
-    let list = await mysql.query('SELECT * FROM t_user')
+    // let list = await mysql.query('SELECT * FROM t_user')
     // console.log(list[2]);
 
-    trans.listTrans(list)
+    let now = moment().format('YYYY-MM-DD HH:MM:SS');
+    console.log(now);
+    // trans.listTrans(list)
     res.end('success')
 })
 
@@ -259,13 +262,14 @@ router.post('/insertUser', async function (req, res) {
         if(check.IDcheck(content.YHID)){
             let err = await mysql.query(`delete from t_user where YHID = '${content.YHID}'`) 
         }
-
+        //输入转录
         content  = await trans.insertTrans(content)
+        let now = moment().format('YYYY-MM-DD HH:MM:SS');
         // console.log(content);
         res.status(200).json({
             status_code: 1,
             message: 'ok',
-            list: await mysql.query(`INSERT INTO t_user (YHDM,DWDM,YHID,YHXM,YHKL,YHXB,YHBM,CSRQ,DJSJ,SFJY,PXH) VALUES('${content.YHDM}','${content.DWDM}','${content.YHID}','${content.YHXM}','${content.YHKL}','${content.YHXB}','${content.YHBM}','${content.CSRQ}','2020-10-01 05:05:02','${content.SFJY}',${content.PXH} );`),
+            list: await mysql.query(`INSERT INTO t_user (YHDM,DWDM,YHID,YHXM,YHKL,YHXB,YHBM,CSRQ,DJSJ,SFJY,PXH) VALUES('${content.YHDM}','${content.DWDM}','${content.YHID}','${content.YHXM}','${content.YHKL}','${content.YHXB}','${content.YHBM}','${content.CSRQ}','${now}','${content.SFJY}',${content.PXH} );`),
             route: '/manage',
         });
     }
