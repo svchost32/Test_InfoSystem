@@ -80,13 +80,6 @@ router.get('/manage', function (req, res) {
 
 })
 
-// router.get('/test2', async function (req, res) {
-//     const list = await mysql.query('SELECT * FROM `ts_bzdm`')
-//     var person = list.filter((p) => {
-//         return p.MC = '男';
-//     })
-//     console.log(person);
-// })
 
 router.get('/test2', async function (req, res) {
     // let list = await mysql.query('SELECT * FROM t_user')
@@ -219,6 +212,20 @@ router.post('/audit', async function (req, res) {
         res.status(200).json({
             status_code: 1,
             route: '/edit',
+        });
+    }
+})
+
+router.post('/remove', async function (req, res) {
+    // 
+    // console.log(Object.keys(req.body)[0]);
+    if (req.session.isLogin) {
+        req.session.chooseID = Object.keys(req.body)[0]
+        let id = req.session.chooseID
+        err = await mysql.query(`delete from t_user where YHID = '${id}'`)
+        res.status(200).json({
+            status_code: 1,
+            route: '/manage',
         });
     }
 })

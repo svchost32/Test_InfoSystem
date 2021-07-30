@@ -124,7 +124,7 @@
                                 <tr v-for="(user,index) in users" class="row mx-0">
                                     <td class="col-1">{{user.PXH}}</td>
                                     <td class="col-1" @click="audit(user.YHID)">查</td>
-                                    <td class="col-1">删</td>
+                                    <td class="col-1" @click="remove(user.YHID)">删</td>
                                     <td class="col-1 " @click="edit(user.YHID)">改</td>
                                     <td class="col-2">{{user.YHXM}}</td>
                                     <td class="col-2">{{user.YHID}}</td>
@@ -170,7 +170,7 @@
             },
             //create生命周期自动生成部门列表
             created: function () {
-
+                
             },
             mounted: function () {
                 let that = this;
@@ -181,7 +181,7 @@
                 }
                 this.$http.post('/getDepartListQuery', this.users, config).then(function (res) {
                     that.departmentsList = res.data.list;
-                })
+                });
             },
             methods: {
 
@@ -253,6 +253,11 @@
                 //查看
                 audit: function (index) {
                     this.$http.post('/audit', index).then(function (res) {
+                        this.window.location.href = (res.data.route) //route为后端给
+                    })
+                },
+                remove: function (index) {
+                    this.$http.post('/remove', index).then(function (res) {
                         this.window.location.href = (res.data.route) //route为后端给
                     })
                 },

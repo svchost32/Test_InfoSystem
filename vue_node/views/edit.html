@@ -237,9 +237,6 @@
           //排序号制作
           this.$http.post('/getAllUserListQuery').then(function (res) {
             let list = JSON.parse(JSON.stringify(res.data.list))
-            list = list.reverse()
-            //先正序最后位+1
-
 
             that.inputForm.PXH = list.sort(function (x, y) {
               return y.PXH - x.PXH
@@ -259,18 +256,10 @@
             }
             //输入搜具体人
             this.$http.post('/getUserQuery', ids, config).then(function (res) {
-              // that.users = res.data.list;
               let data = res.data.list[0];
               that.inputForm = data
               that.verify_YHKL = data.YHKL
-              // that.pre.YHBM = data.YHBM
-              // that.pre.YHXB = data.YHXB
-              // that.pre.CSRQ = '1234531'
-              // console.log(data.CSRQ);
-              // console.log(that.$ref.date.value);
-              // that.$ref.date.value = data.CSRQ
 
-              // console.log(res.data.list);
             })
           }
 
