@@ -273,7 +273,7 @@
                     let that = this
                     $confirm.alert({
                         title: '提示',
-                        content: '确认删除吗？(该操作)',
+                        content: '确认删除吗？(该操作将不可逆)',
                         onOk: function () {
                             // this.window.location.href = (res.data.route)
                             that.$http.post('/remove', index).then(function (res) {
