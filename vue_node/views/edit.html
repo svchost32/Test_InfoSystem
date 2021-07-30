@@ -49,7 +49,7 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="objectName">用户ID *</label>
-        <input type="text" class="form-control" v-model='inputForm.YHID' required>
+        <input type="text" class="form-control " v-model='inputForm.YHID' required>
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
@@ -83,13 +83,13 @@
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">性别</label>
-        <select class="custom-select d-block w-100" ref='gender' v-bind:value='pre.YHXB'>
+        <select class="custom-select d-block w-100" ref='gender' v-bind:value='inputForm.YHXB'>
           <option v-for='(gender,index) in genderList'>{{gender.MC}}</option>
         </select>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">部门</label>
-        <select class="custom-select d-block w-100" ref='depart' v-bind:value='pre.YHBM'>
+        <select class="custom-select d-block w-100" ref='depart' v-bind:value='inputForm.YHBM'>
           <option v-for='(depart,index) in departmentsList'>{{depart.BMMC}}</option>
         </select>
       </div>
@@ -100,7 +100,7 @@
         <div class="row">
           <div class="col-sm-12">
             <input type="text" class="form-control datetimepicker-input" id="datetimepicker5"
-              data-toggle="datetimepicker" data-target="#datetimepicker5" ref='date' v-bind:value='pre.CSRQ' />
+              data-toggle="datetimepicker" data-target="#datetimepicker5" ref='date' v-bind:value='inputForm.CSRQ' />
           </div>
         </div>
       </div>
@@ -235,8 +235,8 @@
               // that.users = res.data.list;
               let data = res.data.list[0];
               that.inputForm = data
-              that.pre.YHBM = '办公室'
-              that.pre.YHXB = '女'
+              that.pre.YHBM = data.YHBM
+              that.pre.YHXB = data.YHXB
               that.pre.CSRQ = '1234531'
               // console.log(data.CSRQ);
               // console.log(that.$ref.date.value);

@@ -25,7 +25,7 @@ router.post('/login', async function (req, res) {
         await check.PWCheck(req.body.userID, req.body.password)
     ) {
         req.session.isLogin = true;
-        let name  = await mysql.query(`select YHXM from t_user where YHID = '${req.body.userID}' limit 1;`)
+        let name = await mysql.query(`select YHXM from t_user where YHID = '${req.body.userID}' limit 1;`)
         req.session.name = name[0].YHXM
         res.status(200).json({
             status_code: 1,
@@ -57,7 +57,7 @@ router.get('/manage', function (req, res) {
     if (req.session.isLogin) {
         //确认登录
         res.render('manage.html', {
-            name:req.session.name,
+            name: req.session.name,
             //被render替换掉的vue模板，无奈之举     
             index: "{{index}}",
             depart: {
@@ -89,7 +89,8 @@ router.get('/manage', function (req, res) {
 
 router.get('/test2', async function (req, res) {
     let list = await mysql.query('SELECT * FROM t_user')
-    
+    // console.log(list[2]);
+
     trans.listTrans(list)
     res.end('success')
 })
@@ -100,7 +101,9 @@ router.post('/getAllUserListQuery', async function (req, res) {
     res.status(200).json({
         status_code: 0,
         message: 'ok',
-        list: await mysql.query('SELECT * FROM `t_user`')
+        list: await trans.listTrans(
+            await mysql.query('SELECT * FROM `t_user`')
+        )
     });
 })
 //特征查询
@@ -108,7 +111,8 @@ router.post('/getUserQuery', async function (req, res) {
     res.status(200).json({
         status_code: 0,
         message: 'ok',
-        list: await mysql.query(`SELECT * FROM \`t_user\` where YHID='${req.body.id}'`)
+        list: await trans.listTrans(
+            await mysql.query(`SELECT * FROM \`t_user\` where YHID='${req.body.id}'`))
     });
 })
 //部门列表
@@ -125,7 +129,8 @@ router.post('/getDepartUserListQuery', async function (req, res) {
     res.status(200).json({
         status_code: 0,
         message: 'ok',
-        list: await mysql.query(`SELECT * FROM \`t_user\` where YHBM='${content.BMDM}'`)
+        list: await trans.listTrans(
+            await mysql.query(`SELECT * FROM \`t_user\` where YHBM='${content.BMDM}'`))
     });
 })
 //性别列表
@@ -149,9 +154,9 @@ router.post('/test', async function (req, res) {
 router.get('/edit', function (req, res) {
     //触发了
     let code = req.session.code
-    let YHID = (req.session.code !=1 && req.session.chooseID != undefined)?
-                req.session.chooseID : ''
-                // console.log(YHID);
+    let YHID = (req.session.code != 1 && req.session.chooseID != undefined) ?
+        req.session.chooseID : ''
+    // console.log(YHID);
     if (req.session.isLogin) {
         if (code == 1 || code == 2 || code == 3) {
             res.render('edit.html', {
@@ -165,7 +170,7 @@ router.get('/edit', function (req, res) {
                 gender: {
                     MC: '{{gender.MC}}'
                 },
-                YHID:YHID,
+                YHID: YHID,
             })
         } else {
             //回登录页
