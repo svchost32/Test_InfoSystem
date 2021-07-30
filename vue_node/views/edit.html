@@ -123,7 +123,7 @@
             {{/if}}
             {{ if (3 === FUNC_CODE)}}
             <input type="text" class="form-control d-block w-100" v-bind:value='inputForm.CSRQ' required
-              :readonly="OPERA_CODE == 3?'readonly':false">
+              :readonly="OPERA_CODE == 3?'readonly':false" ref='date'>
             {{/if}}
           </div>
         </div>
@@ -237,6 +237,10 @@
           //排序号制作
           this.$http.post('/getAllUserListQuery').then(function (res) {
             let list = JSON.parse(JSON.stringify(res.data.list))
+            list = list.reverse()
+            //先正序最后位+1
+
+
             that.inputForm.PXH = list.sort(function (x, y) {
               return y.PXH - x.PXH
             })[0].PXH + 1
@@ -284,6 +288,12 @@
               }
             }
             // this.inputForm.CSRQ = moment(this.$refs.date.value).format('YYYYMMDD');
+            this.inputForm.YHXB = this.$refs.gender.value;
+            // console.log(this.inputForm.YHXB);
+            this.inputForm.YHBM = this.$refs.depart.value;
+            this.inputForm.CSRQ = this.$refs.date.value;
+            // console.log(this.inputForm.YHBM);
+            this.inputForm.SFJY = (false == this.pre.SFJY ? 0 : 1); //是否禁用输出0or1
             if ((this.verify_YHKL === this.inputForm.YHKL) &&
               (this.inputForm.YHID.length != 0) &&
               (this.inputForm.YHKL.length != 0) &&
