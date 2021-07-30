@@ -37,7 +37,7 @@ router.post('/login', async function (req, res) {
         req.session.isLogin = false;
         res.status(200).json({
             status_code: 0,
-            message: 'bad'
+            message: '登录名/密码不正确'
         });
     }
 
@@ -88,7 +88,8 @@ router.get('/test2', async function (req, res) {
     let now = moment().format('YYYY-MM-DD HH:MM:SS');
     console.log(now);
     // trans.listTrans(list)
-    res.end('success')
+    // res.end('success')
+    res.render('test.html')
 })
 
 
@@ -138,13 +139,6 @@ router.post('/getGenderListQuery', async function (req, res) {
     });
 })
 
-
-router.post('/test', async function (req, res) {
-    // res.render('register.html', {
-    //     name: 'Master'
-    // })
-
-})
 
 //修改页
 router.get('/edit', function (req, res) {
@@ -258,27 +252,45 @@ router.post('/logout', async function (req, res) {
     });
 })
 
+//注销路由
+router.get('/logout', function (req, res) {
+    delete req.session.user
+    delete req.session.code
+    delete req.session.chooseID
+    delete req.session.isLogin
+    res.redirect('/')
+})
+
+
 
 //用户数据插入
 router.post('/insertUser', async function (req, res) {
     // console.log('insert');
     if (req.session.isLogin) {
         // console.log(req.body);
-        let content =req.body
+        let content = req.body
         // 存在就删了这条记录重新提交
-        if(check.IDcheck(content.YHID)){
-            let err = await mysql.query(`delete from t_user where YHID = '${content.YHID}'`) 
+        if (req.session.code == 2 && await check.IDcheck(content.YHID)) {
+            let err = await mysql.query(`delete from t_user where YHID = '${content.YHID}'`)
+        } else if (req.session.code == 1 && await check.IDcheck(content.YHID)) {
+            res.status(200).json({
+                status_code: 0,
+                message: '重复ID',
+                route: '/edit',
+            });
+        } else {
+            // console.log('到这里');
+            // 输入转录
+            content = await trans.insertTrans(content)
+            let now = moment().format('YYYY-MM-DD HH:MM:SS');
+            // console.log(content);
+            res.status(200).json({
+                status_code: 1,
+                message: 'ok',
+                list: await mysql.query(`INSERT INTO t_user (YHDM,DWDM,YHID,YHXM,YHKL,YHXB,YHBM,CSRQ,DJSJ,SFJY,PXH) VALUES('${content.YHDM}','${content.DWDM}','${content.YHID}','${content.YHXM}','${content.YHKL}','${content.YHXB}','${content.YHBM}','${content.CSRQ}','${now}','${content.SFJY}',${content.PXH} );`),
+                route: '/manage',
+            });
         }
-        //输入转录
-        content  = await trans.insertTrans(content)
-        let now = moment().format('YYYY-MM-DD HH:MM:SS');
-        // console.log(content);
-        res.status(200).json({
-            status_code: 1,
-            message: 'ok',
-            list: await mysql.query(`INSERT INTO t_user (YHDM,DWDM,YHID,YHXM,YHKL,YHXB,YHBM,CSRQ,DJSJ,SFJY,PXH) VALUES('${content.YHDM}','${content.DWDM}','${content.YHID}','${content.YHXM}','${content.YHKL}','${content.YHXB}','${content.YHBM}','${content.CSRQ}','${now}','${content.SFJY}',${content.PXH} );`),
-            route: '/manage',
-        });
     }
 })
 

@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0vh;
+}
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  background: #fff;
+  display: flex;
+  flex-direction: row;
+  z-index: 999;
+  box-shadow: 0 5px 5px rgba(42, 42, 42, 0.3);
+}
+main {
+  flex: 1;
+  background: #f3f3f0;
+}
+footer {
+  height: 50px;
+  background: #eee;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-top: solid 1px #ccc;
+}

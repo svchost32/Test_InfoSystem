@@ -12,6 +12,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="public/widget/alert/alert.css">
 
 
     <style>
@@ -123,9 +124,9 @@
                             <tbody class="w-100">
                                 <tr v-for="(user,index) in users" class="row mx-0">
                                     <td class="col-1">{{user.PXH}}</td>
-                                    <td class="col-1" @click="audit(user.YHID)">查</td>
-                                    <td class="col-1" @click="remove(user.YHID)">删</td>
-                                    <td class="col-1 " @click="edit(user.YHID)">改</td>
+                                    <td class="col-1 op" @click="audit(user.YHID)">查</td>
+                                    <td class="col-1 op" @click="remove(user.YHID)">删</td>
+                                    <td class="col-1 op" @click="edit(user.YHID)">改</td>
                                     <td class="col-2">{{user.YHXM}}</td>
                                     <td class="col-2">{{user.YHID}}</td>
                                     <td class="col-3">{{user.YHBM}}</td>
@@ -145,7 +146,7 @@
 </body>
 <script src="node_modules/vue/dist/vue.js"></script>
 <script src="node_modules/axios/dist/axios.js"></script>
-<script src="/public/widget/sort/sort.js"></script>
+<script src="/public/widget/alert/alert.js"></script>
 <!-- <script src="/public/js/manage.js"></script> -->
 <script>
     window.onload = function () {
@@ -170,7 +171,7 @@
             },
             //create生命周期自动生成部门列表
             created: function () {
-                
+
             },
             mounted: function () {
                 let that = this;
@@ -257,9 +258,19 @@
                     })
                 },
                 remove: function (index) {
-                    this.$http.post('/remove', index).then(function (res) {
-                        this.window.location.href = (res.data.route) //route为后端给
+                    let that = this
+                    $confirm.alert({
+                        title: '提示',
+                        content: '确认删除吗？(该操作)',
+                        onOk: function () {
+                            // this.window.location.href = (res.data.route)
+                            that.$http.post('/remove', index).then(function (res) {
+                                that.window.location.href = (res.data
+                                    .route) //route为后端给
+                            })
+                        }
                     })
+
                 },
 
                 //注销

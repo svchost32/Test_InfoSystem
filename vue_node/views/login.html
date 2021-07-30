@@ -12,6 +12,8 @@
     <!-- Bootstrap core CSS -->
 
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="public/widget/alert/alert.css">
+
 
 
     <style>
@@ -67,7 +69,8 @@
                 <div class="row">
                     <div class="col-md-9 mb-3">
                         <div class="form-label-group">
-                            <input type='password' class="form-control" placeholder="密码" v-model="inputform.password" required>
+                            <input type='password' class="form-control" placeholder="密码" v-model="inputform.password"
+                                required>
                             <label for="password">口令</label>
                         </div>
                     </div>
@@ -88,7 +91,7 @@
             </div>
             <div class="col-md-auto"></div>
             <div class="col-md-2 mb-3">
-                <button class="btn btn-lg btn-primary btn-block" v-on:click="reset">重置</button>
+                <button class="btn btn-lg btn-primary btn-block" v-on:click="reset($event)">重置</button>
             </div>
             <!-- <div class="col-md-2 mb-3">
                 <router-link to="/foo">Go to Foo</router-link>
@@ -103,6 +106,7 @@
 
     <script src="node_modules/vue/dist/vue.js"></script>
     <script src="node_modules/axios/dist/axios.js"></script>
+    <script src="/public/widget/alert/alert.js"></script>
 
     <script>
         window.onload = function () {
@@ -118,9 +122,10 @@
                 },
                 methods: {
                     login: function () {},
-                    reset: function () {
+                    reset: function (event) {
+                        event.preventDefault();
                         this.inputform.userID = '',
-                        this.inputform.password = ''
+                            this.inputform.password = ''
                     },
                     submitForm(event) {
 
@@ -135,17 +140,29 @@
                             }
 
                             this.$http.post('/login', this.inputform, config).then(function (res) {
-                                if(res.data.status_code === 1){
+                                if (res.data.status_code === 1) {
                                     //1为成功
-                                this.window.location.href = (res.data.route) //route为后端给
-                                }else{
+                                    this.window.location.href = (res.data.route) //route为后端给
+                                } else {
                                     //不成功输出后端提示
-                                    console.log(res.data.message);
+                                    $confirm.alert({
+                                        title: '提示',
+                                        content: res.data.message,
+                                        onOk: function () {
+                                            // this.window.location.href = (res.data.route)
+                                        }
+                                    })
                                 }
                             })
 
                         } else {
-                            console.log('error');
+                            $confirm.alert({
+                                        title: '提示',
+                                        content: '请正确填写用户名/密码',
+                                        onOk: function () {
+                                            // this.window.location.href = (res.data.route)
+                                        }
+                                    })
                         }
 
                     }

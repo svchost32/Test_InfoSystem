@@ -1,14 +1,14 @@
 (function (Vue) {
     var template = `<div class="modal-mask" v-show="show"  transition="modal">
           <div class="modal-confirm">
-              <h2 class="confirm-header">
-                  <i class="iconfont icon-questioncircle"></i> {{ title }}
+              <h2 class="modal-header">
+                  <i class="iconfont icon-questioncircle"></i> {{ title }} <div class='close' @click='op(1)'>x<div>
               </h2>
               <div class="confirm-content">
                   {{ content }}
               </div>
               <div class="confirm-btns">
-                  <button class="btn" @click="op(1)">取 消</button>
+                  
                   <button class="btn btn-primary" @click="op(2)">确 定</button>
               </div>
           </div>
@@ -34,6 +34,7 @@
         op(type){
           this.show = false
           if(type == '1'){
+            this.show = false
             if(this.onCancel) this.onCancel()
           }else{
             if(this.onOk) this.onOk()

@@ -13,6 +13,7 @@
 
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="/public/css/timepicker.css">
+  <link rel="stylesheet" href="public/widget/alert/alert.css">
 
 
   <style>
@@ -35,6 +36,7 @@
 
   <!-- Custom styles for this template -->
   <link href="/public/css/edit.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -145,8 +147,7 @@
     {{ if (FUNC_CODE != 3)}}
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="save-info" v-bind:value='pre.SFJY'>
-      <label class="custom-control-label" for="save-info"
-      disabled='disabled'>禁用</label>
+      <label class="custom-control-label" for="save-info" disabled='disabled'>禁用</label>
     </div>
     {{/if}}
 
@@ -179,6 +180,7 @@
   <script src="node_modules/jquery/dist/jquery.js"></script>
   <script src="public/js/moment.js"></script>
   <script src="public/js/timepicker.js"></script>
+  <script src="/public/widget/alert/alert.js"></script>
 
   <script type="text/javascript">
     $(function () {
@@ -259,6 +261,7 @@
               let data = res.data.list[0];
               that.inputForm = data
               that.verify_YHKL = data.YHKL
+              that.inputForm.PXH = data.PXH
 
             })
           }
@@ -296,7 +299,13 @@
                   this.window.location.href = (res.data.route) //route为后端给
                 } else {
                   //不成功输出后端提示
-                  console.log(res.data.message);
+                  $confirm.alert({
+                    title: '提示',
+                    content: res.data.message,
+                    onOk: function () {
+                      // this.window.location.href = (res.data.route)
+                    }
+                  })
                 }
               })
 

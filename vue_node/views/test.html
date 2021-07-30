@@ -12,8 +12,8 @@
   <!-- Bootstrap core CSS -->
 
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
-  <link rel="stylesheet" href="/public/widget/dialog/test.css">
-  <!-- <link rel="stylesheet" href="public/widget/alert/alert.css"> -->
+  <!-- <link rel="stylesheet" href="/public/widget/dialog/test.css"> -->
+  <link rel="stylesheet" href="public/widget/alert/alert.css">
 
 
   <style>
@@ -80,12 +80,7 @@
         </div>
       </div>
     </div>
-    <div @click="openMask">打开弹窗</div>
-    <dialog-bar v-model="sendVal" type="danger" title="我是标题" content="我是内容" v-on:cancel="clickCancel()"
-      @danger="clickDanger()" @confirm="clickConfirm()" dangerText="Delete"></dialog-bar>
 
-      <modal-box :visible.sync="CreateVisible" :options="CreateOptions" @Confirm="ConfirmCreateHandler()">
-        </modal-box>
 
     <div class="row btn_aera">
       <div class="col-md-auto"></div>
@@ -94,7 +89,7 @@
       </div>
       <div class="col-md-auto"></div>
       <div class="col-md-2 mb-3">
-        <button class="btn btn-lg btn-primary btn-block" v-on:click="reset">重置</button>
+        <button class="btn btn-lg btn-primary btn-block" v-on:click="reset($event)">重置</button>
       </div>
       <!-- <div class="col-md-2 mb-3">
                 <router-link to="/foo">Go to Foo</router-link>
@@ -109,8 +104,8 @@
 
   <script src="node_modules/vue/dist/vue.js"></script>
   <script src="node_modules/axios/dist/axios.js"></script>
-  <!-- <script src="/public/widget/alert/alert.js"></script> -->
-  <script src="/public/widget/dialog/test.js"></script>
+  <script src="/public/widget/alert/alert.js"></script>
+  <!-- <script src="/public/widget/dialog/test.js"></script> -->
 
   <script>
     window.onload = function () {
@@ -132,17 +127,15 @@
         },
         methods: {
           login: function () {},
-          reset: function () {
+          reset: function (event) {
+            event.preventDefault();
             // dialog.init()
             var t = this
             $confirm.alert({
-              title: '你确定删除吗?',
+              title: '警告',
               content: '删除不可以恢复...',
               onOk: function () {
-                t.msg = '你刚点了确定'
-              },
-              onCancel: function () {
-                t.msg = '你刚点了取消'
+                console.log('确定');
               }
             })
           },
