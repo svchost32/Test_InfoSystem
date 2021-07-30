@@ -255,10 +255,15 @@ router.post('/insertUser', async function (req, res) {
     if (req.session.isLogin) {
         // console.log(req.body);
         let content = req.body
+        if(check.IDcheck(content.YHID)){
+            let err = await mysql.query(`delete from t_user where YHID = '${content.YHID}'`) 
+        }
         let YHXB = await mysql.query(`SELECT CODE from ts_bzdm where MC='${content.YHXB}'`)
         let YHBM = await mysql.query(`SELECT BMDM from t_depart where BMMC='${content.YHBM}'`)
         content.YHXB = YHXB[0].CODE
         content.YHBM = YHBM[0].BMDM
+        content.CSRQ = content.CSRQ.substring(0,4)+content.CSRQ.slice(5,7)+content.CSRQ.slice(8,10)
+        content.SFJY = (false == content.SFJY ? 0 : 1)
         // console.log(content);
         res.status(200).json({
             status_code: 1,

@@ -49,14 +49,16 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="objectName">用户ID *</label>
-        <input type="text" class="form-control " v-model='inputForm.YHID' required>
+        <input type="text" class="form-control " v-model='inputForm.YHID' required
+          :readonly="(OPERA_CODE == 3)||(OPERA_CODE == 2)?'readonly':false">
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">口令 *</label>
-        <input type="password" class="form-control" v-model='inputForm.YHKL' required>
+        <input type="password" class="form-control" v-model='inputForm.YHKL' required
+          :readonly="OPERA_CODE == 3?'readonly':false">
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
@@ -76,22 +78,38 @@
     <div class="row">
       <div class="col-md-4 mb-3">
         <label for="objectName">姓名 *</label>
-        <input type="text" class="form-control" v-model='inputForm.YHXM' required>
+        <input type="text" class="form-control" v-model='inputForm.YHXM' required
+          :readonly="OPERA_CODE == 3?'readonly':false">
         <div class="invalid-feedback">
           输入目标对象姓名
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">性别</label>
+        <!-- 查看页不渲染选项 -->
+        {{ if (FUNC_CODE != 3)}}
         <select class="custom-select d-block w-100" ref='gender' v-bind:value='inputForm.YHXB'>
           <option v-for='(gender,index) in genderList'>{{gender.MC}}</option>
         </select>
+        {{/if}}
+        {{ if (3 === FUNC_CODE)}}
+        <input type="text" class="form-control d-block w-100" v-bind:value='inputForm.YHXB' required
+          :readonly="OPERA_CODE == 3?'readonly':false">
+        {{/if}}
+
+
       </div>
       <div class="col-md-4 mb-3">
         <label for="objectName">部门</label>
+        {{ if (FUNC_CODE != 3)}}
         <select class="custom-select d-block w-100" ref='depart' v-bind:value='inputForm.YHBM'>
           <option v-for='(depart,index) in departmentsList'>{{depart.BMMC}}</option>
         </select>
+        {{/if}}
+        {{ if (3 === FUNC_CODE)}}
+        <input type="text" class="form-control d-block w-100" v-bind:value='inputForm.YHBM' required
+          :readonly="OPERA_CODE == 3?'readonly':false">
+        {{/if}}
       </div>
     </div>
     <div class="row">
@@ -99,8 +117,14 @@
         <label for="objectName">出生日期</label>
         <div class="row">
           <div class="col-sm-12">
+            {{ if (FUNC_CODE != 3)}}
             <input type="text" class="form-control datetimepicker-input" id="datetimepicker5"
-              data-toggle="datetimepicker" data-target="#datetimepicker5" ref='date' v-bind:value='inputForm.CSRQ' />
+              data-toggle="datetimepicker" data-target="#datetimepicker5" ref='date' v-bind:value='inputForm.CSRQ'>
+            {{/if}}
+            {{ if (3 === FUNC_CODE)}}
+            <input type="text" class="form-control d-block w-100" v-bind:value='inputForm.CSRQ' required
+              :readonly="OPERA_CODE == 3?'readonly':false">
+            {{/if}}
           </div>
         </div>
       </div>
@@ -118,10 +142,13 @@
             </div>
           </div> -->
     </div>
+    {{ if (FUNC_CODE != 3)}}
     <div class="custom-control custom-checkbox">
       <input type="checkbox" class="custom-control-input" id="save-info" v-bind:value='pre.SFJY'>
-      <label class="custom-control-label" for="save-info">禁用</label>
+      <label class="custom-control-label" for="save-info"
+      disabled='disabled'>禁用</label>
     </div>
+    {{/if}}
 
 
     <div class="row btn_aera">
@@ -185,10 +212,10 @@
           },
           pre: {
             CSRQ: '',
-            YHXB:'',
+            YHXB: '',
             YHBM: '',
-            SFJY:''
-            
+            SFJY: ''
+
           },
           departmentsList: '', //部门列表
           genderList: ''
@@ -210,10 +237,6 @@
           //排序号制作
           this.$http.post('/getAllUserListQuery').then(function (res) {
             let list = JSON.parse(JSON.stringify(res.data.list))
-            list = list.reverse()
-            //先正序最后位+1
-
-
             that.inputForm.PXH = list.sort(function (x, y) {
               return y.PXH - x.PXH
             })[0].PXH + 1
@@ -235,9 +258,10 @@
               // that.users = res.data.list;
               let data = res.data.list[0];
               that.inputForm = data
-              that.pre.YHBM = data.YHBM
-              that.pre.YHXB = data.YHXB
-              that.pre.CSRQ = '1234531'
+              that.verify_YHKL = data.YHKL
+              // that.pre.YHBM = data.YHBM
+              // that.pre.YHXB = data.YHXB
+              // that.pre.CSRQ = '1234531'
               // console.log(data.CSRQ);
               // console.log(that.$ref.date.value);
               // that.$ref.date.value = data.CSRQ
@@ -259,10 +283,7 @@
                 'dataType': 'json'
               }
             }
-            this.inputForm.CSRQ = moment(this.$refs.date.value).format('YYYYMMDD');
-            this.inputForm.YHXB = this.$refs.gender.value;
-            this.inputForm.YHBM = this.$refs.depart.value;
-            this.inputForm.SFJY = (false == this.pre.SFJY ? 0 : 1); //是否禁用输出0or1
+            // this.inputForm.CSRQ = moment(this.$refs.date.value).format('YYYYMMDD');
             if ((this.verify_YHKL === this.inputForm.YHKL) &&
               (this.inputForm.YHID.length != 0) &&
               (this.inputForm.YHKL.length != 0) &&
